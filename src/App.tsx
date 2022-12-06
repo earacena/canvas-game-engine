@@ -55,10 +55,6 @@ function App() {
     } 
   }, [rects]);
 
-  useEffect(() => {
-    draw();
-  }, [draw, rects]);
-
   const addRect = () => {
     console.log(`Adding rectangle to:`, rects);
     setRects(rects.concat({ id: `${rectsCount}`, x: 0, y: 0, w: 100, h: 100, z: rectsCount }))
