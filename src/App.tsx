@@ -54,7 +54,7 @@ function App() {
         canvasCtxRef.current.fillRect(x, y, w, h);
 
         // If currently dragged shape, give a border
-        if (r.id === dragTargetId) {
+        if (b.id === dragTargetId) {
           canvasCtxRef.current.strokeRect(x, y, w, h);
         }
       }
