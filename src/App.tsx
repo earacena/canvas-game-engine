@@ -51,9 +51,15 @@ function App() {
         canvasCtxRef.current.fillStyle = "red";
         const {x, y, w, h} = r;
         canvasCtxRef.current.fillRect(x, y, w, h);
+
+        // If currently dragged shape, give a border
+        if (r.id === dragTargetId) {
+          canvasCtxRef.current.strokeRect(x, y, w, h);
+        }
+
       }
     } 
-  }, [rects]);
+  }, [rects, dragTargetId]);
 
   useEffect(() => {
     draw();
