@@ -17,7 +17,7 @@ function ObjectList({ blocks }: ObjectListProps) {
   return (
     <div>
       Blocks
-      <ul>
+      <ul className="bg-slate-500">
         {blocks.map((b) => (
           <li>
             id: {b.id} x: {b.x} y: {b.y} w: {b.w} h: {b.h}
