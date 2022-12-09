@@ -17,7 +17,7 @@ function App() {
   const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
 
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const [rectsCount, setRectCount] = useState<number>(0);
+  const [blockCount, setBlockCount] = useState<number>(0);
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
   const [mouseDown, setMouseDown] = useState<boolean>(false);
   const [mouseDownPos, setMouseDownPos] = useState<MouseDownCoordinates | null>(
@@ -38,7 +38,7 @@ function App() {
   const draw = useCallback(() => {
     if (canvasCtxRef.current && canvasRef.current) {
       // Clear the canvas
-      canvasCtxRef.current.fillStyle = "white";
+      canvasCtxRef.current.fillStyle = 'white';
       canvasCtxRef.current.fillRect(
         0,
         0,
@@ -48,8 +48,8 @@ function App() {
 
       for (let i = 0; i < blocks.length; ++i) {
         const b = blocks[i];
-        console.log("drawing", b.id);
-        canvasCtxRef.current.fillStyle = "red";
+        console.log('drawing', b.id);
+        canvasCtxRef.current.fillStyle = b.color ?? 'red';
         const { x, y, w, h } = b;
         canvasCtxRef.current.fillRect(x, y, w, h);
 
@@ -65,20 +65,6 @@ function App() {
     draw();
   }, [draw, blocks]);
 
-  const addRect = () => {
-    console.log(`Adding Block to:`, blocks);
-    setBlocks(
-      blocks.concat({
-        id: `${rectsCount}`,
-        x: 0,
-        y: 0,
-        w: 100,
-        h: 100,
-        z: rectsCount,
-      })
-    );
-    setRectCount((count) => count + 1);
-  };
 
   const checkClick = (x: number, y: number) => {
     // Check if coordinate lies within any of the rendered Blocks
@@ -148,21 +134,20 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ display: 'flex', flexDirection: 'row' }}>
-      <canvas
-        id="canvas"
-        ref={canvasRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseOut={handleMouseOut}
-        style={{
-          border: "1px gray solid",
-        }}
-      />
-      <button onClick={addRect}>Add Rect</button>
+    <div className="flex flex-row items-center justify-center">
       <button onClick={draw}>Draw</button>
-      <ObjectList blocks={blocks} />
+      <div>
+        <canvas
+          className="border border-slate-400"
+          id="canvas"
+          ref={canvasRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseOut={handleMouseOut}
+        />
+      </div>
+      <ObjectList blocks={blocks} blockCount={blockCount} setBlockCount={setBlockCount} setBlocks={setBlocks} />
     </div>
   );
 }
