@@ -54,31 +54,31 @@ function ObjectForm({ blocks, addBlock }: ObjectFormProps) {
       <label id="object-name-label" htmlFor="object-name-input">
         Object Name
       </label>
-      <span className="">{errors.objectName?.message}</span>
+      <span className="text-red-700">{errors.objectName?.message}</span>
       <input id="object-name-input" {...register("objectName")} />
 
       <label id="object-x-label" htmlFor="object-x-input">
         X Position
       </label>
-      <span>{errors.objectX?.message}</span>
+      <span className="text-red-700">{errors.objectX?.message}</span>
       <input id="object-x-input" defaultValue={0} {...register("objectX")} />
 
       <label id="object-y-label" htmlFor="object-y-input">
         Y Position
       </label>
-      <span>{errors.objectY?.message}</span>
+      <span className="text-red-700">{errors.objectY?.message}</span>
       <input id="object-y-input" defaultValue={0} {...register("objectY")} />
 
       <label id="object-width-label" htmlFor="object-width-input">
         Width
       </label>
-      <span>{errors.objectWidth?.message}</span>
+      <span className="text-red-700">{errors.objectWidth?.message}</span>
       <input id="object-width-input" {...register("objectWidth")} />
 
       <label id="object-height-label" htmlFor="object-height-input">
         Height
       </label>
-      <span>{errors.objectHeight?.message}</span>
+      <span className="text-red-700">{errors.objectHeight?.message}</span>
       <input id="object-height-input" {...register("objectHeight")} />
 
       <label id="object-type-label" htmlFor="object-type-select">
@@ -91,7 +91,7 @@ function ObjectForm({ blocks, addBlock }: ObjectFormProps) {
       <label id="object-color-label" htmlFor="object-color-select">
         Type
       </label>
-      <span>{errors.objectName?.message}</span>
+      <span className="text-red-700">{errors.objectName?.message}</span>
       <select id="object-color-select" {...register("objectColor")}>
         <option value="red">Red</option>
         <option value="blue">Blue</option>
