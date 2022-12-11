@@ -22,8 +22,8 @@ type ObjectFormProps = {
 const ObjectDataSchema = yup
   .object({
     objectName: yup.string().required(),
-    objectX: yup.number().integer().positive().required(),
-    objectY: yup.number().integer().positive().required(),
+    objectX: yup.number().integer().required(),
+    objectY: yup.number().integer().required(),
     objectWidth: yup.number().positive().required(),
     objectHeight: yup.number().positive().required(),
     objectType: yup.string().required(),
