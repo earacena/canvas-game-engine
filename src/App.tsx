@@ -135,7 +135,7 @@ function App() {
 
   return (
     <div className="flex flex-row items-center justify-center">
-      <button onClick={draw}>Draw</button>
+      <button className="hover:bg-white hover:text-blue-900 bg-blue-900 text-white p-2 rounded-md" onClick={draw}>Draw</button>
       <div>
         <canvas
           className="border border-slate-400"
