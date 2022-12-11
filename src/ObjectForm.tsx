@@ -89,7 +89,7 @@ function ObjectForm({ blocks, addBlock }: ObjectFormProps) {
       </select>
 
       <label id="object-color-label" htmlFor="object-color-select">
-        Type
+        Color
       </label>
       <span className="text-red-700">{errors.objectName?.message}</span>
       <select id="object-color-select" {...register("objectColor")}>
