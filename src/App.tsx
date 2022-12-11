@@ -109,8 +109,8 @@ function App() {
             r.id === dragTargetId
               ? {
                   ...r,
-                  x: mouseDownPos.x - r.w / 2,
-                  y: mouseDownPos.y - r.h / 2,
+                  x: Math.floor(mouseDownPos.x - r.w / 2),
+                  y: Math.floor(mouseDownPos.y - r.h / 2),
                 }
               : r
           );
