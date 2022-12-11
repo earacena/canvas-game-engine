@@ -41,20 +41,37 @@ function ObjectList({ blocks, setBlocks, setBlockCount, blockCount, }: ObjectLis
     setBlockCount((count) => count + 1);
   };
 
+  const objectPropertiesStyle = "text-sm text-slate-500 pr-1";
+
   return (
-    <div>
+    <div className="w-96">
       Objects {objectFormOpened && <ObjectForm addBlock={addBlock} blocks={blocks} />}
 
       <ul className="bg-slate-400 rounded-md p-3">
         {blocks.map((b) => (
           <li key={b.id} className="bg-slate-100 p-3 mt-1 rounded-md">
             
-            <div>
-              <span className="text-sm text-slate-500">ID</span> {b.id}
-              <span className="text-sm text-slate-500">X</span> {b.x}
-              <span className="text-sm text-slate-500">Y</span> {b.y}
-              <span className="text-sm text-slate-500">WIDTH</span> {b.w}
-              <span className="text-sm text-slate-500">HEIGHT</span> {b.h}
+            <div className="flex flex-col">
+              <div>
+                <span className={objectPropertiesStyle}>ID</span>
+                {b.id}
+              </div>
+              <div>
+                <span className={objectPropertiesStyle}>X</span>
+                {b.x}
+              </div>
+              <div>
+                <span className={objectPropertiesStyle}>Y</span>
+                {b.y}
+              </div>
+              <div>
+                <span className={objectPropertiesStyle}>WIDTH</span>
+                {b.w}
+              </div>
+              <div>
+                <span className={objectPropertiesStyle}>HEIGHT</span>
+                {b.h}
+              </div>
             </div>
           </li>
         ))}
