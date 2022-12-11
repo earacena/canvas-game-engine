@@ -1,4 +1,5 @@
 import React, { SetStateAction, useState } from 'react';
+import { BsSquareFill } from 'react-icons/bs';
 import ObjectForm, { ObjectFormData } from './ObjectForm';
 
 export type Block = {
@@ -49,8 +50,8 @@ function ObjectList({ blocks, setBlocks, setBlockCount, blockCount, }: ObjectLis
 
       <ul className="bg-slate-400 rounded-md p-3">
         {blocks.map((b) => (
-          <li key={b.id} className="bg-slate-100 p-3 mt-1 rounded-md">
-            
+          <li key={b.id} className="flex flex-row items-center bg-slate-100 p-3 mt-1 rounded-md">
+            <BsSquareFill className="pr-5" color={b.color} size={50}/>
             <div className="flex flex-col">
               <div>
                 <span className={objectPropertiesStyle}>ID</span>
