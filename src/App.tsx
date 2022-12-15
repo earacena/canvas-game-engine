@@ -82,7 +82,7 @@ function App() {
   };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    console.log("mouse down");
+    // console.log("mouse down");
     if (canvasRef.current) {
       const x: number =
         event.nativeEvent.offsetX - canvasRef.current.clientLeft;
@@ -92,7 +92,7 @@ function App() {
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    console.log("mouse move");
+    // console.log("mouse move");
     // Mouse button not being held
     if (!mouseDown) {
       return;
@@ -123,13 +123,13 @@ function App() {
   };
 
   const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    console.log("mouse up");
+    // console.log("mouse up");
     setDragTargetId(null);
     setMouseDown(false);
   };
 
   const handleMouseOut = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    console.log("mouse out");
+    // console.log("mouse out");
     handleMouseUp(event);
   };
 
