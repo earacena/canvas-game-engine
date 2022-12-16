@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { ChangeEvent, SetStateAction, useState } from 'react';
 import { BsSquareFill } from 'react-icons/bs';
 import ObjectForm, { ObjectFormData } from './ObjectForm';
 
@@ -23,6 +23,12 @@ type ObjectListProps = {
 
 function ObjectList({ blocks, setBlocks, setBlockCount, blockCount, }: ObjectListProps) {
   const [objectFormOpened, setObjectFormOpened] = useState(true);
+
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      console.log(URL.createObjectURL(event.target.files[0]));
+    }
+  }
 
   const addBlock = (data: ObjectFormData) => {
     console.log('Adding ', data, ' to: ', blocks);
@@ -73,9 +79,7 @@ function ObjectList({ blocks, setBlocks, setBlockCount, blockCount, }: ObjectLis
                 <span className={objectPropertiesStyle}>HEIGHT</span>
                 {b.h}
               </div>
-              <input>
-                Upload texture
-              </input>
+              <input type="file" onChange={handleFileUpload} />
             </div>
           </li>
         ))}
