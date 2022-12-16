@@ -73,6 +73,9 @@ function ObjectList({ blocks, setBlocks, setBlockCount, blockCount, }: ObjectLis
                 <span className={objectPropertiesStyle}>HEIGHT</span>
                 {b.h}
               </div>
+              <input>
+                Upload texture
+              </input>
             </div>
           </li>
         ))}
