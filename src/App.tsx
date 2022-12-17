@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import ObjectList, { Block } from "./ObjectList";
+import React, {
+  useState, useEffect, useRef, useCallback,
+} from 'react';
+import ObjectList from './ObjectList';
+import type { Block } from './common.types';
 
 type MouseDownCoordinates = {
   x: number;
@@ -21,13 +24,13 @@ function App() {
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
   const [mouseDown, setMouseDown] = useState<boolean>(false);
   const [mouseDownPos, setMouseDownPos] = useState<MouseDownCoordinates | null>(
-    null
+    null,
   );
 
   useEffect(() => {
     if (canvasRef.current) {
       // Retrieve canvas context
-      canvasCtxRef.current = canvasRef.current.getContext("2d");
+      canvasCtxRef.current = canvasRef.current.getContext('2d');
 
       // Set canvas dimensions
       canvasRef.current.width = 800;
@@ -43,17 +46,19 @@ function App() {
         0,
         0,
         canvasRef.current.width,
-        canvasRef.current.height
+        canvasRef.current.height,
       );
 
-      for (let i = 0; i < blocks.length; ++i) {
+      for (let i = 0; i < blocks.length; i += 1) {
         const b = blocks[i];
         // console.log('drawing', b.id);
-        const { x, y, w, h, image } = b;
+        const {
+          x, y, w, h, image,
+        } = b;
         if (image) {
           // // Check if correct size, resize otherwise
           // if (b.image.height !== h || b.image.width !== w) {
-          //   
+          //
           // }
 
           // Draw image/texture instead of solid color
@@ -75,14 +80,13 @@ function App() {
     draw();
   }, [draw, blocks]);
 
-
   const checkClick = (x: number, y: number) => {
     // Check if coordinate lies within any of the rendered Blocks
-    for (let i = 0; i < blocks.length; ++i) {
+    for (let i = 0; i < blocks.length; i += 1) {
       const b = blocks[i];
       if (isWithinBlock(b, x, y)) {
         setDragTargetId(b.id);
-        console.log(`drag target: ${dragTargetId}`);
+        // console.log(`drag target: ${dragTargetId}`);
         setMouseDownPos({ x, y });
         return true;
       }
@@ -94,8 +98,7 @@ function App() {
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     // console.log("mouse down");
     if (canvasRef.current) {
-      const x: number =
-        event.nativeEvent.offsetX - canvasRef.current.clientLeft;
+      const x: number = event.nativeEvent.offsetX - canvasRef.current.clientLeft;
       const y: number = event.nativeEvent.offsetY - canvasRef.current.clientTop;
       setMouseDown(checkClick(x, y));
     }
@@ -114,17 +117,15 @@ function App() {
       setMouseDownPos({ x: mouseX, y: mouseY });
       if (dragTargetId) {
         // Update drag target
-        setBlocks((blocks) => {
-          const updatedRects = blocks.map((r) =>
-            r.id === dragTargetId
-              ? {
-                  ...r,
-                  x: Math.floor(mouseDownPos.x - r.w / 2),
-                  y: Math.floor(mouseDownPos.y - r.h / 2),
-                }
-              : r
-          );
-          return updatedRects;
+        setBlocks((b) => {
+          const updatedBlocks = b.map((r) => (r.id === dragTargetId
+            ? {
+              ...r,
+              x: Math.floor(mouseDownPos.x - r.w / 2),
+              y: Math.floor(mouseDownPos.y - r.h / 2),
+            }
+            : r));
+          return updatedBlocks;
         });
 
         draw();

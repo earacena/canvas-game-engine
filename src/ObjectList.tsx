@@ -1,19 +1,7 @@
 import React, { ChangeEvent, SetStateAction, useState } from 'react';
 import { BsSquareFill } from 'react-icons/bs';
 import ObjectForm, { ObjectFormData } from './ObjectForm';
-
-export type Block = {
-  id: string,
-  name: string,
-  type: string,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  z: number,
-  color?: string,
-  image?: HTMLImageElement,
-};
+import type { Block } from './common.types';
 
 type ObjectListProps = {
   blocks: Block[],
@@ -22,25 +10,27 @@ type ObjectListProps = {
   setBlockCount: (value: React.SetStateAction<number>) => void,
 };
 
-function ObjectList({ blocks, setBlocks, setBlockCount, blockCount }: ObjectListProps) {
+function ObjectList({
+  blocks, setBlocks, setBlockCount, blockCount,
+}: ObjectListProps) {
   const [objectFormOpened, setObjectFormOpened] = useState(true);
 
   const handleFileUpload = (id: string, event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      
       // Create new image object
       const image = new Image();
       image.src = URL.createObjectURL(event.target.files[0]);
-      
+
       // console.log(image.src);
-      
+
       // Update the selected blocks image
-      setBlocks(blocks.map((b) => b.id === id ? {...b, image } : b));
+      setBlocks(blocks.map((b) => (b.id === id ? { ...b, image } : b)));
     }
-  }
+  };
 
   const addBlock = (data: ObjectFormData) => {
-    console.log('Adding ', data, ' to: ', blocks);
+    // console.log('Adding ', data, ' to: ', blocks);
+
     setBlocks(
       blocks.concat({
         id: `${blockCount}`,
@@ -52,21 +42,24 @@ function ObjectList({ blocks, setBlocks, setBlockCount, blockCount }: ObjectList
         h: data.objectHeight,
         z: blockCount,
         color: data.objectColor,
-      })
+      }),
     );
+
     setBlockCount((count) => count + 1);
   };
 
-  const objectPropertiesStyle = "text-sm text-slate-500 pr-1";
+  const objectPropertiesStyle = 'text-sm text-slate-500 pr-1';
 
   return (
     <div className="w-96">
-      Objects {objectFormOpened && <ObjectForm addBlock={addBlock} blocks={blocks} />}
+      Objects
+      {' '}
+      {objectFormOpened && <ObjectForm addBlock={addBlock} blocks={blocks} />}
 
       <ul className="bg-slate-400 rounded-md p-3">
         {blocks.map((b) => (
           <li key={b.id} className="flex flex-row items-center bg-slate-100 p-3 mt-1 rounded-md">
-            <BsSquareFill className="pr-5" color={b.color} size={50}/>
+            <BsSquareFill className="pr-5" color={b.color} size={50} />
             <div className="flex flex-col">
               <div>
                 <span className={objectPropertiesStyle}>ID</span>
@@ -108,5 +101,3 @@ function ObjectList({ blocks, setBlocks, setBlockCount, blockCount }: ObjectList
 }
 
 export default ObjectList;
-
-
