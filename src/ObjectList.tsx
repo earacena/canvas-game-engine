@@ -12,6 +12,7 @@ export type Block = {
   h: number,
   z: number,
   color?: string,
+  image?: HTMLImageElement,
 };
 
 type ObjectListProps = {
@@ -21,12 +22,20 @@ type ObjectListProps = {
   setBlockCount: (value: React.SetStateAction<number>) => void,
 };
 
-function ObjectList({ blocks, setBlocks, setBlockCount, blockCount, }: ObjectListProps) {
+function ObjectList({ blocks, setBlocks, setBlockCount, blockCount }: ObjectListProps) {
   const [objectFormOpened, setObjectFormOpened] = useState(true);
 
-  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (id: string, event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      console.log(URL.createObjectURL(event.target.files[0]));
+      
+      // Create new image object
+      const image = new Image();
+      image.src = URL.createObjectURL(event.target.files[0]);
+      
+      // console.log(image.src);
+      
+      // Update the selected blocks image
+      setBlocks(blocks.map((b) => b.id === id ? {...b, image } : b));
     }
   }
 
@@ -79,7 +88,16 @@ function ObjectList({ blocks, setBlocks, setBlockCount, blockCount, }: ObjectLis
                 <span className={objectPropertiesStyle}>HEIGHT</span>
                 {b.h}
               </div>
-              <input type="file" onChange={handleFileUpload} />
+              <div>
+                <span className={objectPropertiesStyle}>
+                  TEXTURE
+                </span>
+                <input
+                  type="file"
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => handleFileUpload(b.id, event)}
+                  accept=".jpg,.jpeg,.png"
+                />
+              </div>
             </div>
           </li>
         ))}

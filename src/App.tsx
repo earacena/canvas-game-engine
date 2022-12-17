@@ -48,10 +48,20 @@ function App() {
 
       for (let i = 0; i < blocks.length; ++i) {
         const b = blocks[i];
-        console.log('drawing', b.id);
-        canvasCtxRef.current.fillStyle = b.color ?? 'red';
-        const { x, y, w, h } = b;
-        canvasCtxRef.current.fillRect(x, y, w, h);
+        // console.log('drawing', b.id);
+        const { x, y, w, h, image } = b;
+        if (image) {
+          // // Check if correct size, resize otherwise
+          // if (b.image.height !== h || b.image.width !== w) {
+          //   
+          // }
+
+          // Draw image/texture instead of solid color
+          canvasCtxRef.current.drawImage(image, x, y, w, h);
+        } else {
+          canvasCtxRef.current.fillStyle = b.color ?? 'red';
+          canvasCtxRef.current.fillRect(x, y, w, h);
+        }
 
         // If currently dragged shape, give a border
         if (b.id === dragTargetId) {
