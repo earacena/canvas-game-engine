@@ -13,7 +13,7 @@ type ObjectListProps = {
 function ObjectList({
   blocks, setBlocks, setBlockCount, blockCount,
 }: ObjectListProps) {
-  const [objectFormOpened, setObjectFormOpened] = useState(true);
+  const [objectFormOpened] = useState(true);
 
   const handleFileUpload = (id: string, event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -54,7 +54,7 @@ function ObjectList({
     <div className="w-96">
       Objects
       {' '}
-      {objectFormOpened && <ObjectForm addBlock={addBlock} blocks={blocks} />}
+      {objectFormOpened && <ObjectForm addBlock={addBlock} />}
 
       <ul className="bg-slate-400 rounded-md p-3">
         {blocks.map((b) => (

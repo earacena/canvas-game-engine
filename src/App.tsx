@@ -118,7 +118,7 @@ function App() {
       if (dragTargetId) {
         // Update drag target
         setBlocks((b) => {
-          const updatedBlocks = b.map((r) => (r.id === dragTargetId
+          const updatedBlocks = b.map((r) => ((r.id === dragTargetId)
             ? {
               ...r,
               x: Math.floor(mouseDownPos.x - r.w / 2),
@@ -133,20 +133,26 @@ function App() {
     }
   };
 
-  const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseUp = () => {
     // console.log("mouse up");
     setDragTargetId(null);
     setMouseDown(false);
   };
 
-  const handleMouseOut = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseOut = () => {
     // console.log("mouse out");
-    handleMouseUp(event);
+    handleMouseUp();
   };
 
   return (
     <div className="flex flex-row items-center justify-center">
-      <button className="hover:bg-white hover:text-blue-900 bg-blue-900 text-white p-2 rounded-md" onClick={draw}>Draw</button>
+      <button
+        type="button"
+        className="hover:bg-white hover:text-blue-900 bg-blue-900 text-white p-2 rounded-md"
+        onClick={draw}
+      >
+        Draw
+      </button>
       <div>
         <canvas
           className="border border-slate-400"
@@ -156,9 +162,15 @@ function App() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseOut={handleMouseOut}
+          onBlur={() => undefined}
         />
       </div>
-      <ObjectList blocks={blocks} blockCount={blockCount} setBlockCount={setBlockCount} setBlocks={setBlocks} />
+      <ObjectList
+        blocks={blocks}
+        blockCount={blockCount}
+        setBlockCount={setBlockCount}
+        setBlocks={setBlocks}
+      />
     </div>
   );
 }
