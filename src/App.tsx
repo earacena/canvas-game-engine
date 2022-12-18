@@ -62,7 +62,16 @@ function App() {
           // }
 
           // Draw image/texture instead of solid color
-          canvasCtxRef.current.drawImage(image, x, y, w, h);
+          // Check if image has loaded, otherwise wait for it to load
+          if (image.complete) {
+            canvasCtxRef.current.drawImage(image, x, y, w, h);
+          } else {
+            image.onload = () => {
+              if (canvasCtxRef.current) {
+                canvasCtxRef.current.drawImage(image, x, y, w, h);
+              }
+            };
+          }
         } else {
           canvasCtxRef.current.fillStyle = b.color ?? 'red';
           canvasCtxRef.current.fillRect(x, y, w, h);
@@ -77,6 +86,7 @@ function App() {
   }, [blocks, dragTargetId]);
 
   useEffect(() => {
+    console.log('draw');
     draw();
   }, [draw, blocks]);
 
