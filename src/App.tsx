@@ -22,6 +22,7 @@ function App() {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [blockCount, setBlockCount] = useState<number>(0);
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
+  const [selectedTargetId, setSelectedTargetId] = useState<string | null>(null);
   const [mouseDown, setMouseDown] = useState<boolean>(false);
   const [mouseDownPos, setMouseDownPos] = useState<MouseDownCoordinates | null>(
     null,
@@ -77,13 +78,18 @@ function App() {
           canvasCtxRef.current.fillRect(x, y, w, h);
         }
 
-        // If currently dragged shape, give a border
+        // If currently dragged shape or selected, give a border
         if (b.id === dragTargetId) {
+          canvasCtxRef.current.strokeRect(x, y, w, h);
+        }
+
+        if (b.id === selectedTargetId) {
+          console.log(b.id, selectedTargetId);
           canvasCtxRef.current.strokeRect(x, y, w, h);
         }
       }
     }
-  }, [blocks, dragTargetId]);
+  }, [blocks, dragTargetId, selectedTargetId]);
 
   useEffect(() => {
     console.log('draw');
@@ -96,12 +102,14 @@ function App() {
       const b = blocks[i];
       if (isWithinBlock(b, x, y)) {
         setDragTargetId(b.id);
+        setSelectedTargetId(b.id);
         // console.log(`drag target: ${dragTargetId}`);
         setMouseDownPos({ x, y });
         return true;
       }
     }
 
+    setSelectedTargetId(null);
     return false;
   };
 
