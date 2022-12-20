@@ -68,7 +68,7 @@ function ObjectList({
           <button
             key={b.id}
             type="button"
-            className="flex flex-row items-center bg-slate-100 p-3 mt-1 rounded-md"
+            className="flex flex-row items-center bg-slate-100 p-4 w-auto rounded-md"
             onClick={() => setSelectedTargetId(b.id)}
           >
             <BsSquareFill className="pr-5" color={b.color} size={50} />
@@ -94,7 +94,7 @@ function ObjectList({
                 {b.h}
               </div>
               <div
-                className="flex flex-start items-center"
+                className="flex flex-col items-start"
               >
                 <span className={objectPropertiesStyle}>TEXTURE</span>
                 <input
