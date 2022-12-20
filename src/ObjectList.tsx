@@ -72,7 +72,7 @@ function ObjectList({
             onClick={() => setSelectedTargetId(b.id)}
           >
             <BsSquareFill className="pr-5" color={b.color} size={50} />
-            <div className="flex flex-col">
+            <div className="flex flex-col items-start">
               <div>
                 <span className={objectPropertiesStyle}>ID</span>
                 {b.id}
@@ -93,7 +93,9 @@ function ObjectList({
                 <span className={objectPropertiesStyle}>HEIGHT</span>
                 {b.h}
               </div>
-              <div>
+              <div
+                className="flex flex-start items-center"
+              >
                 <span className={objectPropertiesStyle}>TEXTURE</span>
                 <input
                   type="file"
