@@ -4,18 +4,26 @@ import ObjectForm, { ObjectFormData } from './ObjectForm';
 import type { Block } from './common.types';
 
 type ObjectListProps = {
-  blocks: Block[],
-  blockCount: number,
-  setBlocks: (value: React.SetStateAction<Block[]>) => void,
-  setBlockCount: (value: React.SetStateAction<number>) => void,
+  blocks: Block[];
+  blockCount: number;
+  setBlocks: (value: React.SetStateAction<Block[]>) => void;
+  setBlockCount: (value: React.SetStateAction<number>) => void;
+  setSelectedTargetId: (value: React.SetStateAction<string | null>) => void;
 };
 
 function ObjectList({
-  blocks, setBlocks, setBlockCount, blockCount,
+  blocks,
+  setBlocks,
+  setBlockCount,
+  blockCount,
+  setSelectedTargetId,
 }: ObjectListProps) {
   const [objectFormOpened] = useState(true);
 
-  const handleFileUpload = (id: string, event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (
+    id: string,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     if (event.target.files) {
       // Create new image object
       const image = new Image();
@@ -55,10 +63,14 @@ function ObjectList({
       Objects
       {' '}
       {objectFormOpened && <ObjectForm addBlock={addBlock} />}
-
       <ul className="bg-slate-400 rounded-md p-3">
         {blocks.map((b) => (
-          <li key={b.id} className="flex flex-row items-center bg-slate-100 p-3 mt-1 rounded-md">
+          <button
+            key={b.id}
+            type="button"
+            className="flex flex-row items-center bg-slate-100 p-3 mt-1 rounded-md"
+            onClick={() => setSelectedTargetId(b.id)}
+          >
             <BsSquareFill className="pr-5" color={b.color} size={50} />
             <div className="flex flex-col">
               <div>
@@ -82,9 +94,7 @@ function ObjectList({
                 {b.h}
               </div>
               <div>
-                <span className={objectPropertiesStyle}>
-                  TEXTURE
-                </span>
+                <span className={objectPropertiesStyle}>TEXTURE</span>
                 <input
                   type="file"
                   onChange={(event: ChangeEvent<HTMLInputElement>) => handleFileUpload(b.id, event)}
@@ -92,9 +102,8 @@ function ObjectList({
                 />
               </div>
             </div>
-          </li>
+          </button>
         ))}
-
       </ul>
     </div>
   );
