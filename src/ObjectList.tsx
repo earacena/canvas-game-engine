@@ -8,6 +8,7 @@ type ObjectListProps = {
   blockCount: number;
   setBlocks: (value: React.SetStateAction<Block[]>) => void;
   setBlockCount: (value: React.SetStateAction<number>) => void;
+  selectedTargetId: string | null;
   setSelectedTargetId: (value: React.SetStateAction<string | null>) => void;
 };
 
@@ -16,6 +17,7 @@ function ObjectList({
   setBlocks,
   setBlockCount,
   blockCount,
+  selectedTargetId,
   setSelectedTargetId,
 }: ObjectListProps) {
   const [objectFormOpened] = useState(true);
@@ -68,7 +70,7 @@ function ObjectList({
           <button
             key={b.id}
             type="button"
-            className="flex flex-row items-center bg-slate-100 p-4 w-auto rounded-md"
+            className={`flex flex-row items-center bg-slate-100 p-4 w-auto rounded-md ${selectedTargetId === b.id ? 'border-gray-900 border-4' : ''}`}
             onClick={() => setSelectedTargetId(b.id)}
           >
             <BsSquareFill className="pr-5" color={b.color} size={50} />

@@ -188,6 +188,7 @@ function App() {
         blockCount={blockCount}
         setBlockCount={setBlockCount}
         setBlocks={setBlocks}
+        selectedTargetId={selectedTargetId}
         setSelectedTargetId={setSelectedTargetId}
       />
     </div>
