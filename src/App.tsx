@@ -19,6 +19,9 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
 
+  const canvasMinimapRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasMinimapCtxRef = useRef<CanvasRenderingContext2D | null>(null);
+
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [blockCount, setBlockCount] = useState<number>(0);
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
@@ -36,6 +39,12 @@ function App() {
       // Set canvas dimensions
       canvasRef.current.width = 800;
       canvasRef.current.height = 600;
+    }
+
+    if (canvasMinimapRef.current) {
+      canvasMinimapCtxRef.current = canvasMinimapRef.current.getContext('2d');
+      canvasMinimapRef.current.width = Math.floor(800 / 5);
+      canvasMinimapRef.current.height = Math.floor(600 / 5);
     }
   }, []);
 
@@ -91,9 +100,35 @@ function App() {
     }
   }, [blocks, dragTargetId, selectedTargetId]);
 
+  const drawMinimap = () => {
+    if (
+      canvasMinimapCtxRef.current
+      && canvasMinimapRef.current
+      && canvasRef.current
+    ) {
+      // Clear the canvas
+      canvasMinimapCtxRef.current.fillStyle = 'white';
+      canvasMinimapCtxRef.current.fillRect(
+        0,
+        0,
+        canvasMinimapRef.current.width,
+        canvasMinimapRef.current.height,
+      );
+
+      canvasMinimapCtxRef.current.drawImage(
+        canvasRef.current,
+        0,
+        0,
+        canvasMinimapRef.current.width,
+        canvasMinimapRef.current.height,
+      );
+    }
+  };
+
   useEffect(() => {
     console.log('draw');
     draw();
+    drawMinimap();
   }, [draw, blocks]);
 
   const checkClick = (x: number, y: number) => {
@@ -136,7 +171,7 @@ function App() {
       if (dragTargetId) {
         // Update drag target
         setBlocks((b) => {
-          const updatedBlocks = b.map((r) => ((r.id === dragTargetId)
+          const updatedBlocks = b.map((r) => (r.id === dragTargetId
             ? {
               ...r,
               x: Math.floor(mouseDownPos.x - r.w / 2),
@@ -181,6 +216,11 @@ function App() {
           onMouseUp={handleMouseUp}
           onMouseOut={handleMouseOut}
           onBlur={() => undefined}
+        />
+        <canvas
+          className="border border-slate-400"
+          id="canvas-minimap"
+          ref={canvasMinimapRef}
         />
       </div>
       <ObjectList
