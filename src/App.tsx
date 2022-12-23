@@ -90,6 +90,9 @@ function App() {
         // If currently dragged shape or selected, give a border
         if (b.id === dragTargetId) {
           canvasCtxRef.current.strokeRect(x, y, w, h);
+          canvasCtxRef.current.fillStyle = 'black';
+          canvasCtxRef.current.font = '12px monospace';
+          canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y);
         }
 
         if (b.id === selectedTargetId) {
