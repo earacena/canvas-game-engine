@@ -90,9 +90,19 @@ function App() {
         // If currently dragged shape or selected, give a border
         if (b.id === dragTargetId) {
           canvasCtxRef.current.strokeRect(x, y, w, h);
+
+          // Display current coordinates
           canvasCtxRef.current.fillStyle = 'black';
           canvasCtxRef.current.font = '12px monospace';
-          canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y);
+          if ((x < canvasRef.current.width / 2) && (y < canvasRef.current.height / 2)) {
+            canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y + h);
+          } else if ((x < canvasRef.current.width / 2) && (y >= canvasRef.current.height / 2)) {
+            canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y);
+          } else if ((x >= canvasRef.current.width / 2) && (y < canvasRef.current.height / 2)) {
+            canvasCtxRef.current.fillText(`(${x}, ${y})`, x - 80, y + h);
+          } else if ((x >= canvasRef.current.width / 2) && (y >= canvasRef.current.height / 2)) {
+            canvasCtxRef.current.fillText(`(${x}, ${y})`, x - 80, y);
+          }
         }
 
         if (b.id === selectedTargetId) {
