@@ -105,6 +105,11 @@ function ObjectList({
                   accept=".jpg,.jpeg,.png"
                 />
               </div>
+              <label id="controllable-checkbox-label" htmlFor="controllable-checkbox">
+                Controllable?
+                <input id="controllable-checkbox" type="checkbox" />
+              </label>
+
             </div>
           </button>
         ))}
