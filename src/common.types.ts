@@ -7,6 +7,7 @@ export type Block = {
   w: number,
   h: number,
   z: number,
+  controllable: boolean,
   color?: string,
   image?: HTMLImageElement,
 };

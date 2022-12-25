@@ -38,6 +38,17 @@ function ObjectList({
     }
   };
 
+  const handleSetControllable = (
+    event: ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => {
+    setBlocks(
+      (newBlocks) => (
+        newBlocks.map((b) => (b.id === id ? { ...b, controllable: event.target.checked } : b))
+      ),
+    );
+  };
+
   const addBlock = (data: ObjectFormData) => {
     // console.log('Adding ', data, ' to: ', blocks);
 
@@ -51,6 +62,7 @@ function ObjectList({
         w: data.objectWidth,
         h: data.objectHeight,
         z: blockCount,
+        controllable: false,
         color: data.objectColor,
       }),
     );
@@ -70,7 +82,9 @@ function ObjectList({
           <button
             key={b.id}
             type="button"
-            className={`flex flex-row items-center bg-slate-100 p-4 w-auto rounded-md ${selectedTargetId === b.id ? 'border-gray-900 border-4' : ''}`}
+            className={`flex flex-row items-center bg-slate-100 p-4 w-auto rounded-md ${
+              selectedTargetId === b.id ? 'border-gray-900 border-4' : ''
+            }`}
             onClick={() => setSelectedTargetId(b.id)}
           >
             <BsSquareFill className="pr-5" color={b.color} size={50} />
@@ -95,9 +109,7 @@ function ObjectList({
                 <span className={objectPropertiesStyle}>HEIGHT</span>
                 {b.h}
               </div>
-              <div
-                className="flex flex-col items-start"
-              >
+              <div className="flex flex-col items-start">
                 <span className={objectPropertiesStyle}>TEXTURE</span>
                 <input
                   type="file"
@@ -105,11 +117,17 @@ function ObjectList({
                   accept=".jpg,.jpeg,.png"
                 />
               </div>
-              <label id="controllable-checkbox-label" htmlFor="controllable-checkbox">
+              <label
+                id="controllable-checkbox-label"
+                htmlFor="controllable-checkbox"
+              >
                 Controllable?
-                <input id="controllable-checkbox" type="checkbox" />
+                <input
+                  id="controllable-checkbox"
+                  type="checkbox"
+                  onChange={(event) => handleSetControllable(event, b.id)}
+                />
               </label>
-
             </div>
           </button>
         ))}

@@ -31,6 +31,30 @@ function App() {
     null,
   );
 
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'w' || event.key === 'W') {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - 10 } : b)),
+      );
+    } else if (event.key === 's' || event.key === 'S') {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + 10 } : b)),
+      );
+    } else if (event.key === 'a' || event.key === 'A') {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - 10 } : b)),
+      );
+    } else if (event.key === 'd' || event.key === 'D') {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + 10 } : b)),
+      );
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keypress', handleKeyPress, false);
+  }, []);
+
   useEffect(() => {
     if (canvasRef.current) {
       // Retrieve canvas context
