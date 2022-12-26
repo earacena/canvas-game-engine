@@ -16,14 +16,17 @@ function isWithinBlock(rect: Block, x: Number, y: Number): boolean {
 }
 
 function App() {
+  // Canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
-
   const canvasMinimapRef = useRef<HTMLCanvasElement | null>(null);
   const canvasMinimapCtxRef = useRef<CanvasRenderingContext2D | null>(null);
 
+  // Objects
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [blockCount, setBlockCount] = useState<number>(0);
+
+  // Mouse/Keyboard interaction
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
   const [selectedTargetId, setSelectedTargetId] = useState<string | null>(null);
   const [mouseDown, setMouseDown] = useState<boolean>(false);
@@ -31,29 +34,41 @@ function App() {
     null,
   );
 
-  const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'w' || event.key === 'W') {
+  const [keys, setKeys] = useState<Map<string, boolean>>(new Map());
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    setKeys(new Map(keys.set(event.key.toLowerCase(), true)));
+  };
+
+  const handleKeyUp = (event: KeyboardEvent) => {
+    setKeys(new Map(keys.set(event.key.toLowerCase(), false)));
+  };
+
+  useEffect(() => {
+    if (keys.get('w')) {
       setBlocks(
         (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - 10 } : b)),
       );
-    } else if (event.key === 's' || event.key === 'S') {
+    }
+
+    if (keys.get('s')) {
       setBlocks(
         (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + 10 } : b)),
       );
-    } else if (event.key === 'a' || event.key === 'A') {
+    }
+
+    if (keys.get('a')) {
       setBlocks(
         (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - 10 } : b)),
       );
-    } else if (event.key === 'd' || event.key === 'D') {
+    }
+
+    if (keys.get('d')) {
       setBlocks(
         (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + 10 } : b)),
       );
     }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keypress', handleKeyPress, false);
-  }, []);
+  }, [keys]);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -137,6 +152,11 @@ function App() {
     }
   }, [blocks, dragTargetId, selectedTargetId]);
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown, false);
+    window.addEventListener('keyup', handleKeyUp, false);
+  }, []);
+
   const drawMinimap = () => {
     if (
       canvasMinimapCtxRef.current
@@ -163,7 +183,7 @@ function App() {
   };
 
   useEffect(() => {
-    console.log('draw');
+    // console.log('draw');
     draw();
     drawMinimap();
   }, [draw, blocks]);
