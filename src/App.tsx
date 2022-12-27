@@ -9,6 +9,11 @@ type MouseDownCoordinates = {
   y: number;
 };
 
+type ViewportCoordinates = {
+  x: number;
+  y: number;
+};
+
 function isWithinBlock(rect: Block, x: Number, y: Number): boolean {
   return (
     rect.x <= x && x <= rect.x + rect.w && rect.y <= y && y <= rect.y + rect.h
@@ -23,6 +28,7 @@ function App() {
   const canvasMinimapCtxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasViewportRef = useRef<HTMLCanvasElement | null>(null);
   const canvasViewportCtxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const [viewportPosition] = useState<ViewportCoordinates>({ x: 0, y: 0 });
 
   // Objects
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -103,7 +109,6 @@ function App() {
 
   const draw = useCallback(() => {
     if (canvasCtxRef.current && canvasRef.current) {
-      console.log('draw main');
       // Clear the canvas
       canvasCtxRef.current.fillStyle = 'white';
       canvasCtxRef.current.fillRect(
@@ -159,8 +164,9 @@ function App() {
           }
         }
 
+        // If object is selected, draw a black border
         if (b.id === selectedTargetId) {
-          console.log(b.id, selectedTargetId);
+          canvasCtxRef.current.fillStyle = 'black';
           canvasCtxRef.current.strokeRect(x, y, w, h);
         }
       }
@@ -177,8 +183,8 @@ function App() {
       canvasMinimapCtxRef.current
       && canvasMinimapRef.current
       && canvasRef.current
+      && canvasViewportRef.current
     ) {
-      console.log('draw Minimap');
       // Clear the canvas
       canvasMinimapCtxRef.current.fillStyle = 'white';
       canvasMinimapCtxRef.current.fillRect(
@@ -188,12 +194,22 @@ function App() {
         canvasMinimapRef.current.height,
       );
 
+      // Transfer scaled down copy of main canvas to minimap
       canvasMinimapCtxRef.current.drawImage(
         canvasRef.current,
         0,
         0,
         canvasMinimapRef.current.width,
         canvasMinimapRef.current.height,
+      );
+
+      // Draw viewport border
+      canvasMinimapCtxRef.current.fillStyle = 'red';
+      canvasMinimapCtxRef.current.strokeRect(
+        viewportPosition.x,
+        viewportPosition.y,
+        canvasViewportRef.current.width / 5,
+        canvasViewportRef.current.height / 5,
       );
     }
   };
@@ -204,7 +220,6 @@ function App() {
       && canvasViewportRef.current
       && canvasRef.current
     ) {
-      console.log('draw viewport');
       // Clear viewport
       canvasViewportCtxRef.current.fillStyle = 'white';
       canvasViewportCtxRef.current.fillRect(
@@ -217,8 +232,8 @@ function App() {
       // Transfer slice of main canvas to viewport
       canvasViewportCtxRef.current.drawImage(
         canvasRef.current,
-        0,
-        0,
+        viewportPosition.x,
+        viewportPosition.y,
         canvasViewportRef.current.width,
         canvasViewportRef.current.height,
         0,
