@@ -21,6 +21,8 @@ function App() {
   const canvasCtxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasMinimapRef = useRef<HTMLCanvasElement | null>(null);
   const canvasMinimapCtxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const canvasViewportRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasViewportCtxRef = useRef<CanvasRenderingContext2D | null>(null);
 
   // Objects
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -72,23 +74,36 @@ function App() {
 
   useEffect(() => {
     if (canvasRef.current) {
-      // Retrieve canvas context
+      // Retrieve main canvas context
       canvasCtxRef.current = canvasRef.current.getContext('2d');
 
-      // Set canvas dimensions
-      canvasRef.current.width = 800;
-      canvasRef.current.height = 600;
+      // Set main canvas dimensions
+      canvasRef.current.width = 2000;
+      canvasRef.current.height = 2000;
     }
 
-    if (canvasMinimapRef.current) {
+    if (canvasViewportRef.current) {
+      // Retrieve camera context
+      canvasViewportCtxRef.current = canvasViewportRef.current.getContext('2d');
+
+      // Set viewport (camera) dimensions
+      canvasViewportRef.current.width = 800;
+      canvasViewportRef.current.height = 600;
+    }
+
+    if (canvasMinimapRef.current && canvasRef.current) {
+      // Retrieve main canvas minimap context
       canvasMinimapCtxRef.current = canvasMinimapRef.current.getContext('2d');
-      canvasMinimapRef.current.width = Math.floor(800 / 5);
-      canvasMinimapRef.current.height = Math.floor(600 / 5);
+
+      // Set minimap dimensions based on main canvas dimensions
+      canvasMinimapRef.current.width = Math.floor(canvasRef.current.width / 5);
+      canvasMinimapRef.current.height = Math.floor(canvasRef.current.height / 5);
     }
   }, []);
 
   const draw = useCallback(() => {
     if (canvasCtxRef.current && canvasRef.current) {
+      console.log('draw main');
       // Clear the canvas
       canvasCtxRef.current.fillStyle = 'white';
       canvasCtxRef.current.fillRect(
@@ -163,6 +178,7 @@ function App() {
       && canvasMinimapRef.current
       && canvasRef.current
     ) {
+      console.log('draw Minimap');
       // Clear the canvas
       canvasMinimapCtxRef.current.fillStyle = 'white';
       canvasMinimapCtxRef.current.fillRect(
@@ -182,10 +198,42 @@ function App() {
     }
   };
 
+  const drawViewport = () => {
+    if (
+      canvasViewportCtxRef.current
+      && canvasViewportRef.current
+      && canvasRef.current
+    ) {
+      console.log('draw viewport');
+      // Clear viewport
+      canvasViewportCtxRef.current.fillStyle = 'white';
+      canvasViewportCtxRef.current.fillRect(
+        0,
+        0,
+        canvasViewportRef.current.width,
+        canvasViewportRef.current.height,
+      );
+
+      // Transfer slice of main canvas to viewport
+      canvasViewportCtxRef.current.drawImage(
+        canvasRef.current,
+        0,
+        0,
+        canvasViewportRef.current.width,
+        canvasViewportRef.current.height,
+        0,
+        0,
+        canvasViewportRef.current.width,
+        canvasViewportRef.current.height,
+      );
+    }
+  };
+
   useEffect(() => {
     // console.log('draw');
     draw();
     drawMinimap();
+    drawViewport();
   }, [draw, blocks]);
 
   const checkClick = (x: number, y: number) => {
@@ -207,9 +255,9 @@ function App() {
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     // console.log("mouse down");
-    if (canvasRef.current) {
-      const x: number = event.nativeEvent.offsetX - canvasRef.current.clientLeft;
-      const y: number = event.nativeEvent.offsetY - canvasRef.current.clientTop;
+    if (canvasViewportRef.current) {
+      const x: number = event.nativeEvent.offsetX - canvasViewportRef.current.clientLeft;
+      const y: number = event.nativeEvent.offsetY - canvasViewportRef.current.clientTop;
       setMouseDown(checkClick(x, y));
     }
   };
@@ -221,9 +269,9 @@ function App() {
       return;
     }
 
-    if (canvasRef.current && mouseDownPos) {
-      const mouseX = event.nativeEvent.offsetX - canvasRef.current.clientLeft;
-      const mouseY = event.nativeEvent.offsetY - canvasRef.current.clientTop;
+    if (canvasViewportRef.current && mouseDownPos) {
+      const mouseX = event.nativeEvent.offsetX - canvasViewportRef.current.clientLeft;
+      const mouseY = event.nativeEvent.offsetY - canvasViewportRef.current.clientTop;
       setMouseDownPos({ x: mouseX, y: mouseY });
       if (dragTargetId) {
         // Update drag target
@@ -265,9 +313,15 @@ function App() {
       </button>
       <div>
         <canvas
-          className="border border-slate-400"
-          id="canvas"
+          className="border border-slate-400 hidden"
+          id="canvas-main"
           ref={canvasRef}
+          onBlur={() => undefined}
+        />
+        <canvas
+          className="border border-slate-400"
+          id="canvas-viewport"
+          ref={canvasViewportRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
