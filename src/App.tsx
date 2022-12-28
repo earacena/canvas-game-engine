@@ -28,7 +28,7 @@ function App() {
   const canvasMinimapCtxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasViewportRef = useRef<HTMLCanvasElement | null>(null);
   const canvasViewportCtxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const [viewportPosition] = useState<ViewportCoordinates>({ x: 0, y: 0 });
+  const [viewportPosition, setViewportPosition] = useState<ViewportCoordinates>({ x: 0, y: 0 });
 
   // Objects
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -107,7 +107,7 @@ function App() {
     }
   }, []);
 
-  const draw = useCallback(() => {
+  const drawMain = useCallback(() => {
     if (canvasCtxRef.current && canvasRef.current) {
       // Clear the canvas
       canvasCtxRef.current.fillStyle = 'white';
@@ -206,8 +206,8 @@ function App() {
       // Draw viewport border
       canvasMinimapCtxRef.current.fillStyle = 'red';
       canvasMinimapCtxRef.current.strokeRect(
-        viewportPosition.x,
-        viewportPosition.y,
+        viewportPosition.x / 5,
+        viewportPosition.y / 5,
         canvasViewportRef.current.width / 5,
         canvasViewportRef.current.height / 5,
       );
@@ -246,10 +246,10 @@ function App() {
 
   useEffect(() => {
     // console.log('draw');
-    draw();
+    drawMain();
     drawMinimap();
     drawViewport();
-  }, [draw, blocks]);
+  }, [drawMain, blocks]);
 
   const checkClick = (x: number, y: number) => {
     // Check if coordinate lies within any of the rendered Blocks
@@ -301,7 +301,7 @@ function App() {
           return updatedBlocks;
         });
 
-        draw();
+        drawMain();
       }
     }
   };
@@ -317,12 +317,72 @@ function App() {
     handleMouseUp();
   };
 
+  // const isWithinViewport = (x: number, y: number) => {
+  //   if (canvasViewportRef.current) {
+  //     return (
+  //       (viewportPosition.x <= x)
+  //        && (x <= ((viewportPosition.x + canvasViewportRef.current.width) / 5))
+  //        && ((viewportPosition.y / 5) <= y)
+  //        && (y <= ((viewportPosition.y + canvasViewportRef.current.height) / 5))
+  //     );
+  //   }
+  //   return false;
+  // };
+
+  // const checkMinimapClick = (x: number, y: number) => {
+  //   // Check if coordinate lies within viewport
+  //   if (isWithinViewport(x, y)) {
+  //     setMouseDownPos({ x, y });
+  //     return true;
+  //   }
+
+  //   return false;
+  // };
+
+  const handleMinimapMouseDown = () => {
+    if (canvasMinimapRef.current) {
+      // const x: number = event.nativeEvent.offsetX - canvasMinimapRef.current.clientLeft;
+      // const y: number = event.nativeEvent.offsetY - canvasMinimapRef.current.clientTop;
+      setMouseDown(true);
+    }
+  };
+
+  const handleMinimapMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    // Mouse button not being held
+    if (!mouseDown) {
+      return;
+    }
+
+    if (canvasViewportRef.current && canvasMinimapRef.current && mouseDownPos) {
+      const mouseX = event.nativeEvent.offsetX - canvasMinimapRef.current.clientLeft;
+      const mouseY = event.nativeEvent.offsetY - canvasMinimapRef.current.clientTop;
+      setMouseDownPos({ x: mouseX, y: mouseY });
+
+      setViewportPosition({
+        x: mouseDownPos.x * 5,
+        y: mouseDownPos.y * 5,
+      });
+
+      console.log(viewportPosition);
+
+      drawMinimap();
+    }
+  };
+
+  const handleMinimapMouseUp = () => {
+    setMouseDown(false);
+    drawViewport();
+  };
+
+  const handleMinimapMouseOut = () => {
+    handleMinimapMouseUp();
+  };
   return (
     <div className="flex flex-row items-center justify-center">
       <button
         type="button"
         className="hover:bg-white hover:text-blue-900 bg-blue-900 text-white p-2 rounded-md"
-        onClick={draw}
+        onClick={drawMain}
       >
         Draw
       </button>
@@ -347,6 +407,11 @@ function App() {
           className="border border-slate-400"
           id="canvas-minimap"
           ref={canvasMinimapRef}
+          onMouseDown={handleMinimapMouseDown}
+          onMouseMove={handleMinimapMouseMove}
+          onMouseUp={handleMinimapMouseUp}
+          onMouseOut={handleMinimapMouseOut}
+          onBlur={() => undefined}
         />
       </div>
       <ObjectList
