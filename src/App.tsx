@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import ObjectList from './ObjectList';
 import type { Block } from './common.types';
+import BackgroundObject from './BackgroundObject';
 
 type MouseDownCoordinates = {
   x: number;
@@ -33,6 +34,7 @@ function App() {
   // Objects
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [blockCount, setBlockCount] = useState<number>(0);
+  const [background, setBackground] = useState<HTMLImageElement | null>(null);
 
   // Mouse/Keyboard interaction
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
@@ -118,6 +120,16 @@ function App() {
         canvasRef.current.height,
       );
 
+      // Draw background
+      if (background !== null && background.complete) {
+        for (let i = 0; i < canvasRef.current.width; i += background.width) {
+          for (let j = 0; j < canvasRef.current.height; j += background.height) {
+            canvasCtxRef.current.drawImage(background, i, j, background.width, background.height);
+          }
+        }
+      }
+
+      // Draw blocks
       for (let i = 0; i < blocks.length; i += 1) {
         const b = blocks[i];
         // console.log('drawing', b.id);
@@ -249,7 +261,14 @@ function App() {
     drawMain();
     drawMinimap();
     drawViewport();
-  }, [drawMain, blocks]);
+  }, []);
+
+  useEffect(() => {
+    // console.log('draw');
+    drawMain();
+    drawMinimap();
+    drawViewport();
+  }, [drawMain, blocks, background]);
 
   const checkClick = (x: number, y: number) => {
     // Check if coordinate lies within any of the rendered Blocks
@@ -414,6 +433,10 @@ function App() {
           onBlur={() => undefined}
         />
       </div>
+      <BackgroundObject
+        background={background}
+        setBackground={setBackground}
+      />
       <ObjectList
         blocks={blocks}
         blockCount={blockCount}
