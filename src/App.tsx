@@ -292,7 +292,7 @@ function App() {
     if (canvasViewportRef.current) {
       const x: number = event.nativeEvent.offsetX - canvasViewportRef.current.clientLeft;
       const y: number = event.nativeEvent.offsetY - canvasViewportRef.current.clientTop;
-      setMouseDown(checkClick(x, y));
+      setMouseDown(checkClick(viewportPosition.x + x, viewportPosition.y + y));
     }
   };
 
@@ -306,7 +306,7 @@ function App() {
     if (canvasViewportRef.current && mouseDownPos) {
       const mouseX = event.nativeEvent.offsetX - canvasViewportRef.current.clientLeft;
       const mouseY = event.nativeEvent.offsetY - canvasViewportRef.current.clientTop;
-      setMouseDownPos({ x: mouseX, y: mouseY });
+      setMouseDownPos({ x: mouseX + viewportPosition.x, y: mouseY + viewportPosition.y });
       if (dragTargetId) {
         // Update drag target
         setBlocks((b) => {
@@ -405,7 +405,7 @@ function App() {
       >
         Draw
       </button>
-      <div>
+      <div className="flex flex-col items-center">
         <canvas
           className="border border-slate-400 hidden"
           id="canvas-main"
@@ -433,18 +433,21 @@ function App() {
           onBlur={() => undefined}
         />
       </div>
-      <BackgroundObject
-        background={background}
-        setBackground={setBackground}
-      />
-      <ObjectList
-        blocks={blocks}
-        blockCount={blockCount}
-        setBlockCount={setBlockCount}
-        setBlocks={setBlocks}
-        selectedTargetId={selectedTargetId}
-        setSelectedTargetId={setSelectedTargetId}
-      />
+      <div className="flex flex-col">
+        <BackgroundObject
+          background={background}
+          setBackground={setBackground}
+        />
+        <ObjectList
+          blocks={blocks}
+          blockCount={blockCount}
+          setBlockCount={setBlockCount}
+          setBlocks={setBlocks}
+          selectedTargetId={selectedTargetId}
+          setSelectedTargetId={setSelectedTargetId}
+        />
+
+      </div>
     </div>
   );
 }
