@@ -268,7 +268,7 @@ function App() {
     drawMain();
     drawMinimap();
     drawViewport();
-  }, [drawMain, blocks, background]);
+  }, [drawMain, blocks, background, viewportPosition]);
 
   const checkClick = (x: number, y: number) => {
     // Check if coordinate lies within any of the rendered Blocks
