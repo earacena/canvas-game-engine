@@ -8,10 +8,11 @@ type BackgroundObjectProps = {
 
 function BackgroundObject({ background, setBackground }: BackgroundObjectProps) {
   return (
-    <div>
+    <div className="flex flex-col items-center">
       Background
-      {background === null && 'Upload a background'}
-      {background !== null && `${background.id}`}
+      <span className="slate-500">
+        {background === null && 'Upload a background'}
+      </span>
       <BackgroundObjectForm
         setBackground={setBackground}
       />
