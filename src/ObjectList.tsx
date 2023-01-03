@@ -90,8 +90,8 @@ function ObjectList({
             <BsSquareFill className="pr-5" color={b.color} size={50} />
             <div className="flex flex-col items-start">
               <div>
-                <span className={objectPropertiesStyle}>ID</span>
-                {b.id}
+                <span className={objectPropertiesStyle}>NAME</span>
+                {b.name}
               </div>
               <div>
                 <span className={objectPropertiesStyle}>X</span>
