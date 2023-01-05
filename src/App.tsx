@@ -256,8 +256,8 @@ function App() {
     }
   };
 
+  // Initial draw
   useEffect(() => {
-    // console.log('draw');
     drawMain();
     drawMinimap();
     drawViewport();

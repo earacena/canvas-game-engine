@@ -15,6 +15,7 @@ export type ObjectFormData = {
 
 type ObjectFormProps = {
   addBlock: (data: ObjectFormData) => void;
+  objectFormOpened: boolean;
 };
 
 const ObjectDataSchema = yup
@@ -29,7 +30,7 @@ const ObjectDataSchema = yup
   })
   .required();
 
-function ObjectForm({ addBlock }: ObjectFormProps) {
+function ObjectForm({ addBlock, objectFormOpened }: ObjectFormProps) {
   const {
     register,
     handleSubmit,
@@ -46,7 +47,7 @@ function ObjectForm({ addBlock }: ObjectFormProps) {
 
   return (
     <form
-      className="flex flex-col border border-slate-500 rounded-md"
+      className={`flex flex-col border border-slate-500 rounded-md ${objectFormOpened ? '' : 'hidden'}`}
       onSubmit={handleSubmit(onSubmit)}
     >
       <label id="object-name-label" htmlFor="object-name-input">

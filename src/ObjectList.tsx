@@ -20,7 +20,7 @@ function ObjectList({
   selectedTargetId,
   setSelectedTargetId,
 }: ObjectListProps) {
-  const [objectFormOpened] = useState(true);
+  const [objectFormOpened, setObjectFormOpened] = useState(false);
 
   const handleFileUpload = (
     id: string,
@@ -31,9 +31,7 @@ function ObjectList({
       const image = new Image();
       image.src = URL.createObjectURL(event.target.files[0]);
 
-      // console.log(image.src);
-
-      // Update the selected blocks image
+      // Update the selected blocks image and cached copy
       setBlocks(blocks.map((b) => (b.id === id ? { ...b, image } : b)));
     }
   };
@@ -76,7 +74,13 @@ function ObjectList({
     <div className="w-96">
       Objects
       {' '}
-      {objectFormOpened && <ObjectForm addBlock={addBlock} />}
+      <button type="button" className={`p-1 m-1 border border-slate-500 ${objectFormOpened ? 'hidden' : ''}`} onClick={() => setObjectFormOpened(true)}>
+        Add object
+      </button>
+      <button type="button" className={`p-1 m-1 border border-slate-500 ${objectFormOpened ? '' : 'hidden'}`} onClick={() => setObjectFormOpened(false)}>
+        Close
+      </button>
+      <ObjectForm objectFormOpened={objectFormOpened} addBlock={addBlock} />
       <ul className="bg-slate-400 rounded-md p-3">
         {blocks.map((b) => (
           <button
