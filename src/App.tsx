@@ -29,7 +29,9 @@ function App() {
   const canvasMinimapCtxRef = useRef<CanvasRenderingContext2D | null>(null);
   const canvasViewportRef = useRef<HTMLCanvasElement | null>(null);
   const canvasViewportCtxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const [viewportPosition, setViewportPosition] = useState<ViewportCoordinates>({ x: 0, y: 0 });
+  const [viewportPosition, setViewportPosition] = useState<ViewportCoordinates>(
+    { x: 0, y: 0 },
+  );
 
   // Objects
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -105,7 +107,9 @@ function App() {
 
       // Set minimap dimensions based on main canvas dimensions
       canvasMinimapRef.current.width = Math.floor(canvasRef.current.width / 5);
-      canvasMinimapRef.current.height = Math.floor(canvasRef.current.height / 5);
+      canvasMinimapRef.current.height = Math.floor(
+        canvasRef.current.height / 5,
+      );
     }
   }, []);
 
@@ -123,8 +127,18 @@ function App() {
       // Draw background
       if (background !== null && background.complete) {
         for (let i = 0; i < canvasRef.current.width; i += background.width) {
-          for (let j = 0; j < canvasRef.current.height; j += background.height) {
-            canvasCtxRef.current.drawImage(background, i, j, background.width, background.height);
+          for (
+            let j = 0;
+            j < canvasRef.current.height;
+            j += background.height
+          ) {
+            canvasCtxRef.current.drawImage(
+              background,
+              i,
+              j,
+              background.width,
+              background.height,
+            );
           }
         }
       }
@@ -165,13 +179,25 @@ function App() {
           // Display current coordinates
           canvasCtxRef.current.fillStyle = 'black';
           canvasCtxRef.current.font = '12px monospace';
-          if ((x < canvasRef.current.width / 2) && (y < canvasRef.current.height / 2)) {
+          if (
+            x < canvasRef.current.width / 2
+            && y < canvasRef.current.height / 2
+          ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y + h);
-          } else if ((x < canvasRef.current.width / 2) && (y >= canvasRef.current.height / 2)) {
+          } else if (
+            x < canvasRef.current.width / 2
+            && y >= canvasRef.current.height / 2
+          ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y);
-          } else if ((x >= canvasRef.current.width / 2) && (y < canvasRef.current.height / 2)) {
+          } else if (
+            x >= canvasRef.current.width / 2
+            && y < canvasRef.current.height / 2
+          ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x - 80, y + h);
-          } else if ((x >= canvasRef.current.width / 2) && (y >= canvasRef.current.height / 2)) {
+          } else if (
+            x >= canvasRef.current.width / 2
+            && y >= canvasRef.current.height / 2
+          ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x - 80, y);
           }
         }
@@ -306,7 +332,10 @@ function App() {
     if (canvasViewportRef.current && mouseDownPos) {
       const mouseX = event.nativeEvent.offsetX - canvasViewportRef.current.clientLeft;
       const mouseY = event.nativeEvent.offsetY - canvasViewportRef.current.clientTop;
-      setMouseDownPos({ x: mouseX + viewportPosition.x, y: mouseY + viewportPosition.y });
+      setMouseDownPos({
+        x: mouseX + viewportPosition.x,
+        y: mouseY + viewportPosition.y,
+      });
       if (dragTargetId) {
         // Update drag target
         setBlocks((b) => {
@@ -366,7 +395,9 @@ function App() {
     }
   };
 
-  const handleMinimapMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMinimapMouseMove = (
+    event: React.MouseEvent<HTMLCanvasElement>,
+  ) => {
     // Mouse button not being held
     if (!mouseDown) {
       return;
@@ -446,7 +477,6 @@ function App() {
           selectedTargetId={selectedTargetId}
           setSelectedTargetId={setSelectedTargetId}
         />
-
       </div>
     </div>
   );
