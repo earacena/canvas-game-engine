@@ -41,8 +41,8 @@ function ObjectList({
     id: string,
   ) => {
     setBlocks(
-      (newBlocks) => (
-        newBlocks.map((b) => (b.id === id ? { ...b, controllable: event.target.checked } : b))
+      (newBlocks) => newBlocks.map(
+        (b) => (b.id === id ? { ...b, controllable: event.target.checked } : b),
       ),
     );
   };
@@ -74,10 +74,22 @@ function ObjectList({
     <div className="w-96">
       Objects
       {' '}
-      <button type="button" className={`p-1 m-1 border border-slate-500 ${objectFormOpened ? 'hidden' : ''}`} onClick={() => setObjectFormOpened(true)}>
+      <button
+        type="button"
+        className={`p-1 m-1 border border-slate-500 ${
+          objectFormOpened ? 'hidden' : ''
+        }`}
+        onClick={() => setObjectFormOpened(true)}
+      >
         Add object
       </button>
-      <button type="button" className={`p-1 m-1 border border-slate-500 ${objectFormOpened ? '' : 'hidden'}`} onClick={() => setObjectFormOpened(false)}>
+      <button
+        type="button"
+        className={`p-1 m-1 border border-slate-500 ${
+          objectFormOpened ? '' : 'hidden'
+        }`}
+        onClick={() => setObjectFormOpened(false)}
+      >
         Close
       </button>
       <ObjectForm objectFormOpened={objectFormOpened} addBlock={addBlock} />
