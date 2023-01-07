@@ -45,6 +45,9 @@ function App() {
   const [mouseDownPos, setMouseDownPos] = useState<MouseDownCoordinates | null>(
     null,
   );
+  const [mouseDownClientPos, setMouseDownClientPos] = useState<MouseDownCoordinates | null>(
+    null,
+  );
 
   const [keys, setKeys] = useState<Map<string, boolean>>(new Map());
 
@@ -114,7 +117,7 @@ function App() {
   }, []);
 
   const drawMain = useCallback(() => {
-    if (canvasCtxRef.current && canvasRef.current) {
+    if (canvasCtxRef.current && canvasRef.current && canvasViewportRef.current) {
       // Clear the canvas
       canvasCtxRef.current.fillStyle = 'white';
       canvasCtxRef.current.fillRect(
@@ -173,30 +176,30 @@ function App() {
         }
 
         // If currently dragged shape or selected, give a border
-        if (b.id === dragTargetId) {
+        if (b.id === dragTargetId && mouseDownClientPos) {
           canvasCtxRef.current.strokeRect(x, y, w, h);
 
           // Display current coordinates
           canvasCtxRef.current.fillStyle = 'black';
           canvasCtxRef.current.font = '12px monospace';
           if (
-            x < canvasRef.current.width / 2
-            && y < canvasRef.current.height / 2
+            mouseDownClientPos.x < canvasViewportRef.current.width / 2
+            && mouseDownClientPos.y < canvasViewportRef.current.height / 2
           ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y + h);
           } else if (
-            x < canvasRef.current.width / 2
-            && y >= canvasRef.current.height / 2
+            mouseDownClientPos.x < canvasViewportRef.current.width / 2
+            && mouseDownClientPos.y >= canvasViewportRef.current.height / 2
           ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x + w, y);
           } else if (
-            x >= canvasRef.current.width / 2
-            && y < canvasRef.current.height / 2
+            mouseDownClientPos.x >= canvasViewportRef.current.width / 2
+            && mouseDownClientPos.y < canvasViewportRef.current.height / 2
           ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x - 80, y + h);
           } else if (
-            x >= canvasRef.current.width / 2
-            && y >= canvasRef.current.height / 2
+            mouseDownClientPos.x >= canvasViewportRef.current.width / 2
+            && mouseDownClientPos.y >= canvasViewportRef.current.height / 2
           ) {
             canvasCtxRef.current.fillText(`(${x}, ${y})`, x - 80, y);
           }
@@ -305,6 +308,7 @@ function App() {
         setSelectedTargetId(b.id);
         // console.log(`drag target: ${dragTargetId}`);
         setMouseDownPos({ x, y });
+        setMouseDownClientPos({ x, y });
         return true;
       }
     }
@@ -325,17 +329,24 @@ function App() {
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     // console.log("mouse move");
     // Mouse button not being held
-    if (!mouseDown) {
+    if (!mouseDown || !mouseDownClientPos) {
       return;
     }
 
     if (canvasViewportRef.current && mouseDownPos) {
       const mouseX = event.nativeEvent.offsetX - canvasViewportRef.current.clientLeft;
       const mouseY = event.nativeEvent.offsetY - canvasViewportRef.current.clientTop;
+
       setMouseDownPos({
         x: mouseX + viewportPosition.x,
         y: mouseY + viewportPosition.y,
       });
+
+      setMouseDownClientPos({
+        x: mouseX,
+        y: mouseY,
+      });
+
       if (dragTargetId) {
         // Update drag target
         setBlocks((b) => {
