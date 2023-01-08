@@ -60,32 +60,6 @@ function App() {
   };
 
   useEffect(() => {
-    if (keys.get('w')) {
-      setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - 10 } : b)),
-      );
-    }
-
-    if (keys.get('s')) {
-      setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + 10 } : b)),
-      );
-    }
-
-    if (keys.get('a')) {
-      setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - 10 } : b)),
-      );
-    }
-
-    if (keys.get('d')) {
-      setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + 10 } : b)),
-      );
-    }
-  }, [keys]);
-
-  useEffect(() => {
     if (canvasRef.current) {
       // Retrieve main canvas context
       canvasCtxRef.current = canvasRef.current.getContext('2d');
@@ -285,11 +259,41 @@ function App() {
     }
   };
 
+  // Tick that checks if key was pressed, 60 fps
+  const tick = () => {
+    if (keys.get('w')) {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - 10 } : b)),
+      );
+    }
+
+    if (keys.get('s')) {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + 10 } : b)),
+      );
+    }
+
+    if (keys.get('a')) {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - 10 } : b)),
+      );
+    }
+
+    if (keys.get('d')) {
+      setBlocks(
+        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + 10 } : b)),
+      );
+    }
+
+    setTimeout(tick, 50);
+  };
+
   // Initial draw
   useEffect(() => {
     drawMain();
     drawMinimap();
     drawViewport();
+    tick();
   }, []);
 
   useEffect(() => {
