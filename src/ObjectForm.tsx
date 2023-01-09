@@ -45,52 +45,55 @@ function ObjectForm({ addBlock, objectFormOpened }: ObjectFormProps) {
     }
   };
 
+  const labelStyle: string = 'm-1';
+  const inputStyle: string = 'm-1 p-1 rounded-md';
+
   return (
     <form
       className={`flex flex-col border border-slate-500 rounded-md ${objectFormOpened ? '' : 'hidden'}`}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <label id="object-name-label" htmlFor="object-name-input">
+      <label id="object-name-label" htmlFor="object-name-input" className={labelStyle}>
         Object Name
         <span className="text-red-700">{errors.objectName?.message}</span>
-        <input id="object-name-input" {...register('objectName')} />
+        <input id="object-name-input" className={inputStyle} {...register('objectName')} />
       </label>
 
-      <label id="object-x-label" htmlFor="object-x-input">
+      <label id="object-x-label" htmlFor="object-x-input" className={labelStyle}>
         X Position
         <span className="text-red-700">{errors.objectX?.message}</span>
-        <input id="object-x-input" defaultValue={0} {...register('objectX')} />
+        <input id="object-x-input" className={inputStyle} defaultValue={0} {...register('objectX')} />
       </label>
 
-      <label id="object-y-label" htmlFor="object-y-input">
+      <label id="object-y-label" htmlFor="object-y-input" className={labelStyle}>
         Y Position
         <span className="text-red-700">{errors.objectY?.message}</span>
-        <input id="object-y-input" defaultValue={0} {...register('objectY')} />
+        <input id="object-y-input" className={inputStyle} defaultValue={0} {...register('objectY')} />
       </label>
 
-      <label id="object-width-label" htmlFor="object-width-input">
+      <label id="object-width-label" htmlFor="object-width-input" className={labelStyle}>
         Width
         <span className="text-red-700">{errors.objectWidth?.message}</span>
-        <input id="object-width-input" {...register('objectWidth')} />
+        <input id="object-width-input" className={inputStyle} {...register('objectWidth')} />
       </label>
 
-      <label id="object-height-label" htmlFor="object-height-input">
+      <label id="object-height-label" htmlFor="object-height-input" className={labelStyle}>
         Height
         <span className="text-red-700">{errors.objectHeight?.message}</span>
-        <input id="object-height-input" {...register('objectHeight')} />
+        <input id="object-height-input" className={inputStyle} {...register('objectHeight')} />
       </label>
 
-      <label id="object-type-label" htmlFor="object-type-select">
+      <label id="object-type-label" htmlFor="object-type-select" className={labelStyle}>
         Type
-        <select id="object-type-select" {...register('objectType')}>
+        <select id="object-type-select" className={inputStyle} {...register('objectType')}>
           <option value="block">Block</option>
         </select>
       </label>
 
-      <label id="object-color-label" htmlFor="object-color-select">
+      <label id="object-color-label" htmlFor="object-color-select" className={labelStyle}>
         Color
         <span className="text-red-700">{errors.objectName?.message}</span>
-        <select id="object-color-select" {...register('objectColor')}>
+        <select id="object-color-select" className={inputStyle} {...register('objectColor')}>
           <option value="red">Red</option>
           <option value="blue">Blue</option>
         </select>
