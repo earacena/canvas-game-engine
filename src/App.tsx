@@ -2,18 +2,9 @@ import React, {
   useState, useEffect, useRef, useCallback,
 } from 'react';
 import ObjectList from './ObjectList';
-import type { Block } from './common.types';
+import type { Block, ViewportCoordinates, MouseDownCoordinates } from './common.types';
 import BackgroundObject from './BackgroundObject';
-
-type MouseDownCoordinates = {
-  x: number;
-  y: number;
-};
-
-type ViewportCoordinates = {
-  x: number;
-  y: number;
-};
+import Minimap from './Minimap';
 
 function isWithinBlock(rect: Block, x: Number, y: Number): boolean {
   return (
@@ -380,68 +371,6 @@ function App() {
     handleMouseUp();
   };
 
-  // const isWithinViewport = (x: number, y: number) => {
-  //   if (canvasViewportRef.current) {
-  //     return (
-  //       (viewportPosition.x <= x)
-  //        && (x <= ((viewportPosition.x + canvasViewportRef.current.width) / 5))
-  //        && ((viewportPosition.y / 5) <= y)
-  //        && (y <= ((viewportPosition.y + canvasViewportRef.current.height) / 5))
-  //     );
-  //   }
-  //   return false;
-  // };
-
-  // const checkMinimapClick = (x: number, y: number) => {
-  //   // Check if coordinate lies within viewport
-  //   if (isWithinViewport(x, y)) {
-  //     setMouseDownPos({ x, y });
-  //     return true;
-  //   }
-
-  //   return false;
-  // };
-
-  const handleMinimapMouseDown = () => {
-    if (canvasMinimapRef.current) {
-      // const x: number = event.nativeEvent.offsetX - canvasMinimapRef.current.clientLeft;
-      // const y: number = event.nativeEvent.offsetY - canvasMinimapRef.current.clientTop;
-      setMouseDown(true);
-    }
-  };
-
-  const handleMinimapMouseMove = (
-    event: React.MouseEvent<HTMLCanvasElement>,
-  ) => {
-    // Mouse button not being held
-    if (!mouseDown) {
-      return;
-    }
-
-    if (canvasViewportRef.current && canvasMinimapRef.current && mouseDownPos) {
-      const mouseX = event.nativeEvent.offsetX - canvasMinimapRef.current.clientLeft;
-      const mouseY = event.nativeEvent.offsetY - canvasMinimapRef.current.clientTop;
-      setMouseDownPos({ x: mouseX, y: mouseY });
-
-      setViewportPosition({
-        x: mouseDownPos.x * 5,
-        y: mouseDownPos.y * 5,
-      });
-
-      console.log(viewportPosition);
-
-      drawMinimap();
-    }
-  };
-
-  const handleMinimapMouseUp = () => {
-    setMouseDown(false);
-    drawViewport();
-  };
-
-  const handleMinimapMouseOut = () => {
-    handleMinimapMouseUp();
-  };
   return (
     <div className="flex flex-row items-center justify-center">
       <button
@@ -458,6 +387,18 @@ function App() {
           ref={canvasRef}
           onBlur={() => undefined}
         />
+        <Minimap
+          canvasMinimapRef={canvasMinimapRef}
+          canvasViewportRef={canvasViewportRef}
+          drawMinimap={drawMinimap}
+          drawViewport={drawViewport}
+          viewportPosition={viewportPosition}
+          setViewportPosition={setViewportPosition}
+          mouseDown={mouseDown}
+          setMouseDown={setMouseDown}
+          setMouseDownPos={setMouseDownPos}
+          mouseDownPos={mouseDownPos}
+        />
         <canvas
           className="border border-slate-400"
           id="canvas-viewport"
@@ -466,16 +407,6 @@ function App() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseOut={handleMouseOut}
-          onBlur={() => undefined}
-        />
-        <canvas
-          className="border border-slate-400"
-          id="canvas-minimap"
-          ref={canvasMinimapRef}
-          onMouseDown={handleMinimapMouseDown}
-          onMouseMove={handleMinimapMouseMove}
-          onMouseUp={handleMinimapMouseUp}
-          onMouseOut={handleMinimapMouseOut}
           onBlur={() => undefined}
         />
       </div>

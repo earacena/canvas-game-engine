@@ -11,3 +11,13 @@ export type Block = {
   color?: string,
   image?: HTMLImageElement,
 };
+
+export type ViewportCoordinates = {
+  x: number;
+  y: number;
+};
+
+export type MouseDownCoordinates = {
+  x: number;
+  y: number;
+};
