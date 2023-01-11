@@ -5,6 +5,7 @@ import ObjectList from './ObjectList';
 import type { Block, ViewportCoordinates, MouseDownCoordinates } from './common.types';
 import BackgroundObject from './BackgroundObject';
 import Minimap from './Minimap';
+import Viewport from './Viewport';
 
 function isWithinBlock(rect: Block, x: Number, y: Number): boolean {
   return (
@@ -399,15 +400,12 @@ function App() {
           setMouseDownPos={setMouseDownPos}
           mouseDownPos={mouseDownPos}
         />
-        <canvas
-          className="border border-slate-400"
-          id="canvas-viewport"
-          ref={canvasViewportRef}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseOut={handleMouseOut}
-          onBlur={() => undefined}
+        <Viewport
+          canvasViewportRef={canvasViewportRef}
+          handleMouseDown={handleMouseDown}
+          handleMouseMove={handleMouseMove}
+          handleMouseUp={handleMouseUp}
+          handleMouseOut={handleMouseOut}
         />
       </div>
       <div className="flex flex-col">
