@@ -43,6 +43,9 @@ function App() {
 
   const [keys, setKeys] = useState<Map<string, boolean>>(new Map());
 
+  // Controllable block movement speed in pixels
+  const movementSpeed: number = 5;
+
   const handleKeyDown = (event: KeyboardEvent) => {
     setKeys(new Map(keys.set(event.key.toLowerCase(), true)));
   };
@@ -255,29 +258,37 @@ function App() {
   const tick = () => {
     if (keys.get('w')) {
       setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - 10 } : b)),
+        (updatedBlocks) => (
+          updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - movementSpeed } : b))
+        ),
       );
     }
 
     if (keys.get('s')) {
       setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + 10 } : b)),
+        (updatedBlocks) => (
+          updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + movementSpeed } : b))
+        ),
       );
     }
 
     if (keys.get('a')) {
       setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - 10 } : b)),
+        (updatedBlocks) => (
+          updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - movementSpeed } : b))
+        ),
       );
     }
 
     if (keys.get('d')) {
       setBlocks(
-        (updatedBlocks) => updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + 10 } : b)),
+        (updatedBlocks) => (
+          updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + movementSpeed } : b))
+        ),
       );
     }
 
-    setTimeout(tick, 50);
+    setTimeout(tick, 1000 / 60);
   };
 
   // Initial draw
