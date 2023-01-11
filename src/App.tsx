@@ -388,6 +388,13 @@ function App() {
           ref={canvasRef}
           onBlur={() => undefined}
         />
+        <Viewport
+          canvasViewportRef={canvasViewportRef}
+          handleMouseDown={handleMouseDown}
+          handleMouseMove={handleMouseMove}
+          handleMouseUp={handleMouseUp}
+          handleMouseOut={handleMouseOut}
+        />
         <Minimap
           canvasMinimapRef={canvasMinimapRef}
           canvasViewportRef={canvasViewportRef}
@@ -399,13 +406,6 @@ function App() {
           setMouseDown={setMouseDown}
           setMouseDownPos={setMouseDownPos}
           mouseDownPos={mouseDownPos}
-        />
-        <Viewport
-          canvasViewportRef={canvasViewportRef}
-          handleMouseDown={handleMouseDown}
-          handleMouseMove={handleMouseMove}
-          handleMouseUp={handleMouseUp}
-          handleMouseOut={handleMouseOut}
         />
       </div>
       <div className="flex flex-col">
