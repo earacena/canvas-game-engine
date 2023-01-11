@@ -44,7 +44,7 @@ function App() {
   const [keys, setKeys] = useState<Map<string, boolean>>(new Map());
 
   // Controllable block movement speed in pixels
-  const movementSpeed: number = 5;
+  const movementSpeed: number = 1;
 
   const handleKeyDown = (event: KeyboardEvent) => {
     setKeys(new Map(keys.set(event.key.toLowerCase(), true)));
@@ -125,8 +125,8 @@ function App() {
         // If block is camera locked, adjust viewport position
         if (b.cameraLocked) {
           setViewportPosition({
-            x: (b.x) - (canvasViewportRef.current.width / 2) + (b.w / 2),
-            y: (b.y) - (canvasViewportRef.current.height / 2) + (b.h / 2),
+            x: Math.floor((b.x) - (canvasViewportRef.current.width / 2) + (b.w / 2)),
+            y: Math.floor((b.y) - (canvasViewportRef.current.height / 2) + (b.h / 2)),
           });
         }
 
