@@ -122,12 +122,15 @@ function App() {
         const {
           x, y, w, h, image,
         } = b;
-        if (image) {
-          // // Check if correct size, resize otherwise
-          // if (b.image.height !== h || b.image.width !== w) {
-          //
-          // }
+        // If block is camera locked, adjust viewport position
+        if (b.cameraLocked) {
+          setViewportPosition({
+            x: (b.x) - (canvasViewportRef.current.width / 2) + (b.w / 2),
+            y: (b.y) - (canvasViewportRef.current.height / 2) + (b.h / 2),
+          });
+        }
 
+        if (image) {
           // Draw image/texture instead of solid color
           // Check if image has loaded, otherwise wait for it to load
           if (image.complete) {

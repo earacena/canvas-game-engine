@@ -8,6 +8,7 @@ export type Block = {
   h: number,
   z: number,
   controllable: boolean,
+  cameraLocked: boolean,
   color?: string,
   image?: HTMLImageElement,
 };

@@ -47,6 +47,20 @@ function ObjectList({
     );
   };
 
+  const handleSetLocked = (
+    event: ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => {
+    // Unlock any other camera locked object and lock desired object
+    setBlocks(
+      (newBlocks) => newBlocks.map(
+        (b) => (
+          b.id === id ? { ...b, cameraLocked: event.target.checked } : { ...b, cameraLocked: false }
+        ),
+      ),
+    );
+  };
+
   const addBlock = (data: ObjectFormData) => {
     // console.log('Adding ', data, ' to: ', blocks);
 
@@ -61,6 +75,7 @@ function ObjectList({
         h: data.objectHeight,
         z: blockCount,
         controllable: false,
+        cameraLocked: false,
         color: data.objectColor,
       }),
     );
@@ -137,11 +152,22 @@ function ObjectList({
                 id="controllable-checkbox-label"
                 htmlFor="controllable-checkbox"
               >
-                Controllable?
+                Controllable (WASD)?
                 <input
                   id="controllable-checkbox"
                   type="checkbox"
                   onChange={(event) => handleSetControllable(event, b.id)}
+                />
+              </label>
+              <label
+                id="locked-camera-checkbox-label"
+                htmlFor="locaked-camera-checkbox"
+              >
+                Lock camera?
+                <input
+                  id="locked-camera-checkbox"
+                  type="checkbox"
+                  onChange={(event) => handleSetLocked(event, b.id)}
                 />
               </label>
             </div>
