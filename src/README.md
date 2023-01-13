@@ -2,7 +2,7 @@
 
 ## Description
 
-A game editor/engine powered by HTML5 Canvas that allows a user to assemble a simple game.
+A game editor/engine powered by HTML5 Canvas that allows a user to assemble a simple game. Deployed live [here](https://canvas-game-engine.onrender.com).
 
 ### Features
 
