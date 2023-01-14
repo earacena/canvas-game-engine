@@ -2,7 +2,11 @@ import React, {
   useState, useEffect, useRef, useCallback,
 } from 'react';
 import ObjectList from './ObjectList';
-import type { Block, ViewportCoordinates, MouseDownCoordinates } from './common.types';
+import type {
+  Block,
+  ViewportCoordinates,
+  MouseDownCoordinates,
+} from './common.types';
 import BackgroundObject from './BackgroundObject';
 import Minimap from './Minimap';
 import Viewport from './Viewport';
@@ -37,9 +41,7 @@ function App() {
   const [mouseDownPos, setMouseDownPos] = useState<MouseDownCoordinates | null>(
     null,
   );
-  const [mouseDownClientPos, setMouseDownClientPos] = useState<MouseDownCoordinates | null>(
-    null,
-  );
+  const [mouseDownClientPos, setMouseDownClientPos] = useState<MouseDownCoordinates | null>(null);
 
   const [keys, setKeys] = useState<Map<string, boolean>>(new Map());
 
@@ -86,7 +88,11 @@ function App() {
   }, []);
 
   const drawMain = useCallback(() => {
-    if (canvasCtxRef.current && canvasRef.current && canvasViewportRef.current) {
+    if (
+      canvasCtxRef.current
+      && canvasRef.current
+      && canvasViewportRef.current
+    ) {
       // Clear the canvas
       canvasCtxRef.current.fillStyle = 'white';
       canvasCtxRef.current.fillRect(
@@ -125,8 +131,8 @@ function App() {
         // If block is camera locked, adjust viewport position
         if (b.cameraLocked) {
           setViewportPosition({
-            x: Math.floor((b.x) - (canvasViewportRef.current.width / 2) + (b.w / 2)),
-            y: Math.floor((b.y) - (canvasViewportRef.current.height / 2) + (b.h / 2)),
+            x: Math.floor(b.x - canvasViewportRef.current.width / 2 + b.w / 2),
+            y: Math.floor(b.y - canvasViewportRef.current.height / 2 + b.h / 2),
           });
         }
 
@@ -260,35 +266,27 @@ function App() {
   // Tick that checks if key was pressed, 60 fps
   const tick = () => {
     if (keys.get('w')) {
-      setBlocks(
-        (updatedBlocks) => (
-          updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - movementSpeed } : b))
-        ),
-      );
+      setBlocks((updatedBlocks) => (
+        updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - movementSpeed } : b))
+      ));
     }
 
     if (keys.get('s')) {
-      setBlocks(
-        (updatedBlocks) => (
-          updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + movementSpeed } : b))
-        ),
-      );
+      setBlocks((updatedBlocks) => (
+        updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + movementSpeed } : b))
+      ));
     }
 
     if (keys.get('a')) {
-      setBlocks(
-        (updatedBlocks) => (
-          updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - movementSpeed } : b))
-        ),
-      );
+      setBlocks((updatedBlocks) => (
+        updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - movementSpeed } : b))
+      ));
     }
 
     if (keys.get('d')) {
-      setBlocks(
-        (updatedBlocks) => (
-          updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + movementSpeed } : b))
-        ),
-      );
+      setBlocks((updatedBlocks) => (
+        updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + movementSpeed } : b))
+      ));
     }
 
     setTimeout(tick, 1000 / 60);
