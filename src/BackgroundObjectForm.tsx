@@ -15,8 +15,6 @@ function BackgroundObjectForm({ setBackground }: BackgroundObjectFormProps) {
       image.onload = () => {
         setBackground(image);
       };
-
-      // Update background
     }
   };
 

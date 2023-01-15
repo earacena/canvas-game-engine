@@ -108,7 +108,7 @@ function ObjectList({
         Close
       </button>
       <ObjectForm objectFormOpened={objectFormOpened} addBlock={addBlock} />
-      <ul className="bg-slate-400 rounded-md p-3">
+      <ul className={`bg-slate-400 rounded-md p-3 ${blocks.length === 0 ? 'hidden' : ''} `}>
         {blocks.map((b) => (
           <button
             key={b.id}
