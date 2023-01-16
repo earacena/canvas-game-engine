@@ -273,7 +273,7 @@ function App() {
         if (canvasRef.current) {
           const canvasHeight: number = canvasRef.current.height;
           return updatedBlocks.map((b) => (
-            b.controllable ? { ...b, y: Math.min(b.y + movementSpeed, canvasHeight) } : b
+            b.controllable ? { ...b, y: Math.min(b.y + movementSpeed, canvasHeight - b.h) } : b
           ));
         }
         return updatedBlocks;
@@ -293,7 +293,7 @@ function App() {
         if (canvasRef.current) {
           const canvasWidth: number = canvasRef.current.width;
           return updatedBlocks.map((b) => (
-            b.controllable ? { ...b, x: Math.min(b.x + movementSpeed, canvasWidth) } : b
+            b.controllable ? { ...b, x: Math.min(b.x + movementSpeed, canvasWidth - b.w) } : b
           ));
         }
         return updatedBlocks;
