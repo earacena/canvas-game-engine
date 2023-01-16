@@ -46,7 +46,7 @@ function App() {
   const [keys, setKeys] = useState<Map<string, boolean>>(new Map());
 
   // Controllable block movement speed in pixels
-  const movementSpeed: number = 1;
+  const movementSpeed: number = 5;
 
   const handleKeyDown = (event: KeyboardEvent) => {
     setKeys(new Map(keys.set(event.key.toLowerCase(), true)));
@@ -128,13 +128,6 @@ function App() {
         const {
           x, y, w, h, image,
         } = b;
-        // If block is camera locked, adjust viewport position
-        if (b.cameraLocked) {
-          setViewportPosition({
-            x: Math.floor(b.x - canvasViewportRef.current.width / 2 + b.w / 2),
-            y: Math.floor(b.y - canvasViewportRef.current.height / 2 + b.h / 2),
-          });
-        }
 
         if (image) {
           // Draw image/texture instead of solid color
@@ -306,6 +299,18 @@ function App() {
     drawMinimap();
     drawViewport();
   }, [drawMain, blocks, background, viewportPosition]);
+
+  useEffect(() => {
+    // If block is camera locked, adjust viewport position
+    for (let i = 0; i < blocks.length; i += 1) {
+      if (blocks[i].cameraLocked && canvasViewportRef.current) {
+        setViewportPosition({
+          x: Math.floor(blocks[i].x - canvasViewportRef.current.width / 2 + blocks[i].w / 2),
+          y: Math.floor(blocks[i].y - canvasViewportRef.current.height / 2 + blocks[i].h / 2),
+        });
+      }
+    }
+  }, [blocks]);
 
   const checkClick = (x: number, y: number) => {
     // Check if coordinate lies within any of the rendered Blocks
