@@ -257,29 +257,47 @@ function App() {
   };
 
   // Tick that checks if key was pressed, 60 fps
+  // Update coordinate in 'movementSpeed' increments, and prevent setting updated
+  // coordinate dimensions of the main canvas
   const tick = () => {
     if (keys.get('w')) {
       setBlocks((updatedBlocks) => (
-        updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y - movementSpeed } : b))
+        updatedBlocks.map((b) => (
+          b.controllable ? { ...b, y: Math.max(b.y - movementSpeed, 0) } : b
+        ))
       ));
     }
 
     if (keys.get('s')) {
-      setBlocks((updatedBlocks) => (
-        updatedBlocks.map((b) => (b.controllable ? { ...b, y: b.y + movementSpeed } : b))
-      ));
+      setBlocks((updatedBlocks) => {
+        if (canvasRef.current) {
+          const canvasHeight: number = canvasRef.current.height;
+          return updatedBlocks.map((b) => (
+            b.controllable ? { ...b, y: Math.min(b.y + movementSpeed, canvasHeight) } : b
+          ));
+        }
+        return updatedBlocks;
+      });
     }
 
     if (keys.get('a')) {
       setBlocks((updatedBlocks) => (
-        updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x - movementSpeed } : b))
+        updatedBlocks.map((b) => (
+          b.controllable ? { ...b, x: Math.max(b.x - movementSpeed, 0) } : b
+        ))
       ));
     }
 
     if (keys.get('d')) {
-      setBlocks((updatedBlocks) => (
-        updatedBlocks.map((b) => (b.controllable ? { ...b, x: b.x + movementSpeed } : b))
-      ));
+      setBlocks((updatedBlocks) => {
+        if (canvasRef.current) {
+          const canvasWidth: number = canvasRef.current.width;
+          return updatedBlocks.map((b) => (
+            b.controllable ? { ...b, x: Math.min(b.x + movementSpeed, canvasWidth) } : b
+          ));
+        }
+        return updatedBlocks;
+      });
     }
 
     setTimeout(tick, 1000 / 60);
