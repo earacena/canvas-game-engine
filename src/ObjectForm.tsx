@@ -40,9 +40,7 @@ function ObjectForm({ addBlock, objectFormOpened }: ObjectFormProps) {
   });
 
   const onSubmit: SubmitHandler<ObjectFormData> = (data: ObjectFormData) => {
-    if (data.objectType === 'block') {
-      addBlock(data);
-    }
+    addBlock(data);
   };
 
   const labelStyle: string = 'm-1';
@@ -87,6 +85,7 @@ function ObjectForm({ addBlock, objectFormOpened }: ObjectFormProps) {
         Type
         <select id="object-type-select" className={inputStyle} {...register('objectType')}>
           <option value="block">Block</option>
+          <option value="collision">Collision Block</option>
         </select>
       </label>
 
