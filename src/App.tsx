@@ -283,7 +283,8 @@ function App() {
         for (let i = 0; i < updatedBlocks.length; i += 1) {
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
-              !isColliding(
+              updatedBlocks[i].controllable
+              && !isColliding(
                 {
                   ...updatedBlocks[i],
                   y: updatedBlocks[i].y - movementSpeed,
@@ -318,7 +319,8 @@ function App() {
         for (let i = 0; i < updatedBlocks.length; i += 1) {
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
-              !isColliding(
+              updatedBlocks[i].controllable
+              && !isColliding(
                 {
                   ...updatedBlocks[i],
                   y: updatedBlocks[i].y + movementSpeed,
@@ -351,7 +353,8 @@ function App() {
         for (let i = 0; i < updatedBlocks.length; i += 1) {
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
-              !isColliding(
+              updatedBlocks[i].controllable
+              && !isColliding(
                 {
                   ...updatedBlocks[i],
                   x: updatedBlocks[i].x - movementSpeed,
@@ -385,7 +388,8 @@ function App() {
         for (let i = 0; i < updatedBlocks.length; i += 1) {
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
-              !isColliding(
+              updatedBlocks[i].controllable
+              && !isColliding(
                 {
                   ...updatedBlocks[i],
                   x: updatedBlocks[i].x + movementSpeed,
@@ -511,13 +515,12 @@ function App() {
 
   return (
     <div className="flex flex-row items-center justify-center">
-      <button
-        type="button"
-        className="hover:bg-white hover:text-blue-900 bg-blue-900 text-white p-2 rounded-md"
-        onClick={drawMain}
-      >
-        Draw
-      </button>
+      <div className="flex flex-col overflow-scroll h-96">
+        <BackgroundObject
+          background={background}
+          setBackground={setBackground}
+        />
+      </div>
       <div className="flex flex-col items-center">
         <canvas
           className="border border-slate-400 hidden"
@@ -545,11 +548,7 @@ function App() {
           mouseDownPos={mouseDownPos}
         />
       </div>
-      <div className="flex flex-col">
-        <BackgroundObject
-          background={background}
-          setBackground={setBackground}
-        />
+      <span className="max-h-screen overlfow-scroll">
         <ObjectList
           blocks={blocks}
           blockCount={blockCount}
@@ -558,7 +557,7 @@ function App() {
           selectedTargetId={selectedTargetId}
           setSelectedTargetId={setSelectedTargetId}
         />
-      </div>
+      </span>
     </div>
   );
 }

@@ -108,12 +108,12 @@ function ObjectList({
         Close
       </button>
       <ObjectForm objectFormOpened={objectFormOpened} addBlock={addBlock} />
-      <ul className={`bg-slate-400 rounded-md p-3 ${blocks.length === 0 ? 'hidden' : ''} `}>
+      <ul className={`bg-slate-400 rounded-md p-1 ${blocks.length === 0 ? 'hidden' : ''} `}>
         {blocks.map((b) => (
           <button
             key={b.id}
             type="button"
-            className={`flex flex-row items-center bg-slate-100 p-4 w-auto rounded-md ${
+            className={`flex flex-row items-center bg-slate-100 p-4 w-auto rounded-md m-2 ${
               selectedTargetId === b.id ? 'border-gray-900 border-4' : ''
             }`}
             onClick={() => setSelectedTargetId(b.id)}
