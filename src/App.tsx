@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useRef, useCallback,
+  useState, useEffect, useRef,
 } from 'react';
 import ObjectList from './ObjectList';
 import type {
@@ -38,11 +38,8 @@ function App() {
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
   const [selectedTargetId, setSelectedTargetId] = useState<string | null>(null);
   const [mouseDown, setMouseDown] = useState<boolean>(false);
-  const [mouseDownPos, setMouseDownPos] = useState<MouseDownCoordinates | null>(
-    null,
-  );
+  const [mouseDownPos, setMouseDownPos] = useState<MouseDownCoordinates | null>(null);
   const [mouseDownClientPos, setMouseDownClientPos] = useState<MouseDownCoordinates | null>(null);
-
   const [keys, setKeys] = useState<Map<string, boolean>>(new Map());
 
   // Controllable block movement speed in pixels
@@ -87,7 +84,7 @@ function App() {
     }
   }, []);
 
-  const drawMain = useCallback(() => {
+  const drawMain = () => {
     if (
       canvasCtxRef.current
       && canvasRef.current
@@ -183,7 +180,7 @@ function App() {
         }
       }
     }
-  }, [blocks, dragTargetId, selectedTargetId]);
+  };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown, false);
@@ -263,10 +260,8 @@ function App() {
       && b1.h + b1.y > b2.y
   );
 
-  // Tick that checks if key was pressed, 60 fps
-  // Update coordinate in 'movementSpeed' increments, and prevent setting updated
-  // coordinate dimensions of the main canvas
-  const tick = () => {
+  // Update coordinate in 'movementSpeed' increments
+  const processKeys = () => {
     if (keys.get('w')) {
       setBlocks((prevBlocks) => {
         const collisionBlocks = prevBlocks.filter((b) => b.type === 'collision');
@@ -405,24 +400,32 @@ function App() {
         return updatedBlocks;
       });
     }
-
-    setTimeout(tick, 1000 / 60);
   };
 
   // Initial draw
   useEffect(() => {
-    drawMain();
-    drawMinimap();
-    drawViewport();
-    tick();
-  }, []);
+    const drawLoop = () => {
+      drawMain();
+      drawMinimap();
+      drawViewport();
+      processKeys();
+      return () => {
+        setTimeout(window.requestAnimationFrame, 1000 / 60);
+      };
+    };
 
-  useEffect(() => {
-    // console.log('draw');
-    drawMain();
-    drawMinimap();
-    drawViewport();
-  }, [drawMain, blocks, background, viewportPosition]);
+    // let timerId: number;
+    // eslint-disable-next-line prefer-const
+    window.requestAnimationFrame(drawLoop);
+    // tick();
+  }, [drawMain]);
+
+  // useEffect(() => {
+  //   // console.log('draw');
+  //   drawMain();
+  //   drawMinimap();
+  //   drawViewport();
+  // }, [drawMain]);
 
   useEffect(() => {
     // If block is camera locked, adjust viewport position
