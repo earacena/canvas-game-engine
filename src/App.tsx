@@ -91,13 +91,15 @@ function App() {
       && canvasViewportRef.current
     ) {
       // Clear the canvas
-      canvasCtxRef.current.fillStyle = 'white';
-      canvasCtxRef.current.fillRect(
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height,
-      );
+      if (background === null) {
+        canvasCtxRef.current.fillStyle = 'white';
+        canvasCtxRef.current.fillRect(
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height,
+        );
+      }
 
       // Draw background
       if (background !== null && background.complete) {
@@ -414,18 +416,8 @@ function App() {
       };
     };
 
-    // let timerId: number;
-    // eslint-disable-next-line prefer-const
     window.requestAnimationFrame(drawLoop);
-    // tick();
   }, [drawMain]);
-
-  // useEffect(() => {
-  //   // console.log('draw');
-  //   drawMain();
-  //   drawMinimap();
-  //   drawViewport();
-  // }, [drawMain]);
 
   useEffect(() => {
     // If block is camera locked, adjust viewport position
@@ -517,14 +509,14 @@ function App() {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center">
+    <div>
       <div className="flex flex-col overflow-scroll h-96">
         <BackgroundObject
           background={background}
           setBackground={setBackground}
         />
       </div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-row items-center">
         <canvas
           className="border border-slate-400 hidden"
           id="canvas-main"
