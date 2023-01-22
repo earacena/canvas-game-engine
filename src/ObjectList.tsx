@@ -1,5 +1,5 @@
 import React, { ChangeEvent, SetStateAction, useState } from 'react';
-import { BsSquareFill } from 'react-icons/bs';
+import { BsSquareFill, BsTrash } from 'react-icons/bs';
 import ObjectForm, { ObjectFormData } from './ObjectForm';
 import type { Block } from './common.types';
 
@@ -83,6 +83,12 @@ function ObjectList({
     setBlockCount((count) => count + 1);
   };
 
+  const handleDelete = (blockId: string) => {
+    setBlocks((updatedBlocks) => (
+      updatedBlocks.filter((b) => b.id !== blockId)
+    ));
+  };
+
   const objectPropertiesStyle = 'text-sm text-slate-500 pr-1';
 
   return (
@@ -120,6 +126,9 @@ function ObjectList({
           >
             <BsSquareFill className="pr-5" color={b.color} size={50} />
             <div className="flex flex-col items-start">
+              <button type="button" onClick={() => handleDelete(b.id)}>
+                <BsTrash />
+              </button>
               <div>
                 <span className={objectPropertiesStyle}>NAME</span>
                 {b.name}
