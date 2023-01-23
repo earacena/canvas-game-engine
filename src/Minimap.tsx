@@ -10,7 +10,6 @@ type MinimapProps = {
   canvasMinimapRef: MutableRefObject<HTMLCanvasElement | null>;
   drawMinimap: () => void;
   drawViewport: () => void;
-  viewportPosition: ViewportCoordinates | null;
   setViewportPosition: Dispatch<SetStateAction<ViewportCoordinates>>;
   mouseDown: boolean,
   setMouseDown: Dispatch<SetStateAction<boolean>>;
@@ -23,7 +22,6 @@ function Minimap({
   canvasMinimapRef,
   drawMinimap,
   drawViewport,
-  viewportPosition,
   setViewportPosition,
   setMouseDown,
   setMouseDownPos,
@@ -55,8 +53,6 @@ function Minimap({
         x: mouseDownPos.x * 5,
         y: mouseDownPos.y * 5,
       });
-
-      console.log(viewportPosition);
 
       drawMinimap();
     }

@@ -1,13 +1,10 @@
-import React, { ChangeEvent, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, SetStateAction } from 'react';
 import { BsSquareFill, BsTrash } from 'react-icons/bs';
-import ObjectForm, { ObjectFormData } from './ObjectForm';
 import type { Block } from './common.types';
 
 type ObjectListProps = {
   blocks: Block[];
-  blockCount: number;
   setBlocks: (value: React.SetStateAction<Block[]>) => void;
-  setBlockCount: (value: React.SetStateAction<number>) => void;
   selectedTargetId: string | null;
   setSelectedTargetId: (value: React.SetStateAction<string | null>) => void;
 };
@@ -15,13 +12,9 @@ type ObjectListProps = {
 function ObjectList({
   blocks,
   setBlocks,
-  setBlockCount,
-  blockCount,
   selectedTargetId,
   setSelectedTargetId,
 }: ObjectListProps) {
-  const [objectFormOpened, setObjectFormOpened] = useState(false);
-
   const handleFileUpload = (
     id: string,
     event: ChangeEvent<HTMLInputElement>,
@@ -61,28 +54,6 @@ function ObjectList({
     );
   };
 
-  const addBlock = (data: ObjectFormData) => {
-    // console.log('Adding ', data, ' to: ', blocks);
-
-    setBlocks(
-      blocks.concat({
-        id: `${blockCount}`,
-        name: data.objectName,
-        type: data.objectType,
-        x: data.objectX,
-        y: data.objectY,
-        w: data.objectWidth,
-        h: data.objectHeight,
-        z: blockCount,
-        controllable: false,
-        cameraLocked: false,
-        color: data.objectColor,
-      }),
-    );
-
-    setBlockCount((count) => count + 1);
-  };
-
   const handleDelete = (blockId: string) => {
     setBlocks((updatedBlocks) => (
       updatedBlocks.filter((b) => b.id !== blockId)
@@ -95,26 +66,7 @@ function ObjectList({
     <div className="w-fit">
       Objects
       {' '}
-      <button
-        type="button"
-        className={`p-1 m-1 border border-slate-500 ${
-          objectFormOpened ? 'hidden' : ''
-        }`}
-        onClick={() => setObjectFormOpened(true)}
-      >
-        Add object
-      </button>
-      <button
-        type="button"
-        className={`p-1 m-1 border border-slate-500 ${
-          objectFormOpened ? '' : 'hidden'
-        }`}
-        onClick={() => setObjectFormOpened(false)}
-      >
-        Close
-      </button>
-      <ObjectForm objectFormOpened={objectFormOpened} addBlock={addBlock} />
-      <ul className={`bg-slate-400 rounded-md p-1 ${blocks.length === 0 ? 'hidden' : ''} `}>
+      <ul className={`bg-slate-400 rounded-md p-1 ${blocks.length === 0 ? 'hidden' : ''} h-screen overflow-scroll`}>
         {blocks.map((b) => (
           <div className="flex flex-row">
             <button type="button" onClick={() => handleDelete(b.id)}>

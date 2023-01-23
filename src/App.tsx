@@ -10,6 +10,7 @@ import type {
 import BackgroundObject from './BackgroundObject';
 import Minimap from './Minimap';
 import Viewport from './Viewport';
+import ObjectForm from './ObjectForm';
 
 function isWithinBlock(rect: Block, x: number, y: number): boolean {
   return (
@@ -535,50 +536,50 @@ function App() {
   };
 
   return (
-    <div>
-      <div className="flex flex-col overflow-scroll h-96">
+    <div className="flex flex-row items-start">
+      <div className="flex flex-col">
         <BackgroundObject
           background={background}
           setBackground={setBackground}
         />
-      </div>
-      <div className="flex flex-row items-center">
-        <canvas
-          className="border border-slate-400 hidden"
-          id="canvas-main"
-          ref={canvasRef}
-          onBlur={() => undefined}
-        />
-        <Viewport
-          canvasViewportRef={canvasViewportRef}
-          handleMouseDown={handleMouseDown}
-          handleMouseMove={handleMouseMove}
-          handleMouseUp={handleMouseUp}
-          handleMouseOut={handleMouseOut}
-        />
-        <Minimap
-          canvasMinimapRef={canvasMinimapRef}
-          canvasViewportRef={canvasViewportRef}
-          drawMinimap={drawMinimap}
-          drawViewport={drawViewport}
-          viewportPosition={viewportPosition}
-          setViewportPosition={setViewportPosition}
-          mouseDown={mouseDown}
-          setMouseDown={setMouseDown}
-          setMouseDownPos={setMouseDownPos}
-          mouseDownPos={mouseDownPos}
-        />
-      </div>
-      <span className="max-h-screen overlfow-scroll">
-        <ObjectList
+        <ObjectForm
           blocks={blocks}
+          setBlocks={setBlocks}
           blockCount={blockCount}
           setBlockCount={setBlockCount}
-          setBlocks={setBlocks}
-          selectedTargetId={selectedTargetId}
-          setSelectedTargetId={setSelectedTargetId}
         />
-      </span>
+
+      </div>
+      <canvas
+        className="border border-slate-400 hidden"
+        id="canvas-main"
+        ref={canvasRef}
+        onBlur={() => undefined}
+      />
+      <Viewport
+        canvasViewportRef={canvasViewportRef}
+        handleMouseDown={handleMouseDown}
+        handleMouseMove={handleMouseMove}
+        handleMouseUp={handleMouseUp}
+        handleMouseOut={handleMouseOut}
+      />
+      <Minimap
+        canvasMinimapRef={canvasMinimapRef}
+        canvasViewportRef={canvasViewportRef}
+        drawMinimap={drawMinimap}
+        drawViewport={drawViewport}
+        setViewportPosition={setViewportPosition}
+        mouseDown={mouseDown}
+        setMouseDown={setMouseDown}
+        setMouseDownPos={setMouseDownPos}
+        mouseDownPos={mouseDownPos}
+      />
+      <ObjectList
+        blocks={blocks}
+        setBlocks={setBlocks}
+        selectedTargetId={selectedTargetId}
+        setSelectedTargetId={setSelectedTargetId}
+      />
     </div>
   );
 }
