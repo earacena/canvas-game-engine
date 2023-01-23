@@ -11,7 +11,7 @@ import BackgroundObject from './BackgroundObject';
 import Minimap from './Minimap';
 import Viewport from './Viewport';
 
-function isWithinBlock(rect: Block, x: Number, y: Number): boolean {
+function isWithinBlock(rect: Block, x: number, y: number): boolean {
   return (
     rect.x <= x && x <= rect.x + rect.w && rect.y <= y && y <= rect.y + rect.h
   );
@@ -277,7 +277,9 @@ function App() {
         }
 
         // Check for collision
+        let movementNotColliding: boolean;
         for (let i = 0; i < updatedBlocks.length; i += 1) {
+          movementNotColliding = false;
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
               updatedBlocks[i].controllable
@@ -289,8 +291,12 @@ function App() {
                 collisionBlocks[j],
               )
             ) {
-              updatedBlocks[i].y = Math.max(updatedBlocks[i].y - movementSpeed, 0);
+              movementNotColliding = true;
+              break;
             }
+          }
+          if (movementNotColliding) {
+            updatedBlocks[i].y = Math.max(updatedBlocks[i].y - movementSpeed, 0);
           }
         }
 
@@ -313,7 +319,9 @@ function App() {
         }
 
         // Check for collision
+        let movementNotColliding;
         for (let i = 0; i < updatedBlocks.length; i += 1) {
+          movementNotColliding = false;
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
               updatedBlocks[i].controllable
@@ -325,8 +333,13 @@ function App() {
                 collisionBlocks[j],
               )
             ) {
-              updatedBlocks[i].y = Math.min(updatedBlocks[i].y + movementSpeed, canvasHeight);
+              movementNotColliding = true;
+              break;
             }
+          }
+
+          if (movementNotColliding) {
+            updatedBlocks[i].y = Math.min(updatedBlocks[i].y + movementSpeed, canvasHeight);
           }
         }
 
@@ -347,7 +360,9 @@ function App() {
         }
 
         // Check for collision
+        let movementNotColliding: boolean;
         for (let i = 0; i < updatedBlocks.length; i += 1) {
+          movementNotColliding = false;
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
               updatedBlocks[i].controllable
@@ -359,8 +374,13 @@ function App() {
                 collisionBlocks[j],
               )
             ) {
-              updatedBlocks[i].x = Math.max(updatedBlocks[i].x - movementSpeed, 0);
+              movementNotColliding = true;
+              break;
             }
+          }
+
+          if (movementNotColliding) {
+            updatedBlocks[i].x = Math.max(updatedBlocks[i].x - movementSpeed, 0);
           }
         }
 
@@ -382,7 +402,9 @@ function App() {
         }
 
         // Check for collision
+        let movementNotColliding: boolean;
         for (let i = 0; i < updatedBlocks.length; i += 1) {
+          movementNotColliding = false;
           for (let j = 0; j < collisionBlocks.length; j += 1) {
             if (
               updatedBlocks[i].controllable
@@ -394,8 +416,12 @@ function App() {
                 collisionBlocks[j],
               )
             ) {
-              updatedBlocks[i].x = Math.min(updatedBlocks[i].x + movementSpeed, canvasWidth);
+              movementNotColliding = true;
+              break;
             }
+          }
+          if (movementNotColliding) {
+            updatedBlocks[i].x = Math.min(updatedBlocks[i].x + movementSpeed, canvasWidth);
           }
         }
 
