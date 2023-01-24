@@ -265,168 +265,129 @@ function App() {
 
   // Update coordinate in 'movementSpeed' increments
   const processKeys = () => {
-    if (keys.get('w')) {
+    const validKeyPressed: boolean = keys.get('w') || keys.get('a') || keys.get('s') || keys.get('d') || false;
+
+    if (validKeyPressed) {
+      let keyPressed: string;
+
+      if (keys.get('w')) keyPressed = 'w';
+      else if (keys.get('a')) keyPressed = 'a';
+      else if (keys.get('s')) keyPressed = 's';
+      else if (keys.get('d')) keyPressed = 'd';
+
       setBlocks((prevBlocks) => {
-        const collisionBlocks = prevBlocks.filter((b) => b.type === 'collision');
-        const updatedBlocks = [...prevBlocks];
+        if (canvasRef.current) {
+          const canvasHeight: number = canvasRef.current.height;
+          const canvasWidth: number = canvasRef.current.width;
+          const collisionBlocks = prevBlocks.filter((b) => b.type === 'collision');
+          const updatedBlocks = [...prevBlocks];
 
-        // Don't check for collision if there are no collision blocks
-        if (collisionBlocks.length === 0) {
-          return updatedBlocks.map(
-            (b) => (b.controllable ? { ...b, y: Math.max(b.y - movementSpeed, 0) } : b),
-          );
-        }
-
-        // Check for collision
-        let movementNotColliding: boolean;
-        for (let i = 0; i < updatedBlocks.length; i += 1) {
-          movementNotColliding = false;
-          for (let j = 0; j < collisionBlocks.length; j += 1) {
-            if (
-              updatedBlocks[i].controllable
-              && !isColliding(
-                {
-                  ...updatedBlocks[i],
-                  y: updatedBlocks[i].y - movementSpeed,
-                },
-                collisionBlocks[j],
-              )
-            ) {
-              movementNotColliding = true;
-              break;
+          // Don't check for collision if there are no collision blocks
+          if (collisionBlocks.length === 0) {
+            if (keyPressed === 'w') {
+              return updatedBlocks.map(
+                (b) => (b.controllable ? { ...b, y: Math.max(b.y - movementSpeed, 0) } : b),
+              );
             }
-          }
-          if (movementNotColliding) {
-            updatedBlocks[i].y = Math.max(updatedBlocks[i].y - movementSpeed, 0);
-          }
-        }
-
-        return updatedBlocks;
-      });
-    }
-
-    if (keys.get('s') && canvasRef.current) {
-      const canvasHeight = canvasRef.current.height;
-
-      setBlocks((prevBlocks) => {
-        const collisionBlocks = prevBlocks.filter((b) => b.type === 'collision');
-        const updatedBlocks = [...prevBlocks];
-
-        // Don't check for collision if there are no collision blocks
-        if (collisionBlocks.length === 0) {
-          return updatedBlocks.map(
-            (b) => (b.controllable ? { ...b, y: Math.min(b.y + movementSpeed, canvasHeight) } : b),
-          );
-        }
-
-        // Check for collision
-        let movementNotColliding;
-        for (let i = 0; i < updatedBlocks.length; i += 1) {
-          movementNotColliding = false;
-          for (let j = 0; j < collisionBlocks.length; j += 1) {
-            if (
-              updatedBlocks[i].controllable
-              && !isColliding(
-                {
-                  ...updatedBlocks[i],
-                  y: updatedBlocks[i].y + movementSpeed,
-                },
-                collisionBlocks[j],
-              )
-            ) {
-              movementNotColliding = true;
-              break;
+            if (keyPressed === 'a') {
+              return updatedBlocks.map(
+                (b) => (b.controllable ? { ...b, x: Math.max(b.x - movementSpeed, 0) } : b),
+              );
+            }
+            if (keyPressed === 's') {
+              return updatedBlocks.map(
+                (b) => (
+                  b.controllable ? { ...b, y: Math.min(b.y + movementSpeed, canvasHeight) } : b
+                ),
+              );
+            }
+            if (keyPressed === 'd') {
+              return updatedBlocks.map(
+                (b) => (
+                  b.controllable ? { ...b, x: Math.min(b.x + movementSpeed, canvasWidth) } : b
+                ),
+              );
             }
           }
 
-          if (movementNotColliding) {
-            updatedBlocks[i].y = Math.min(updatedBlocks[i].y + movementSpeed, canvasHeight);
-          }
-        }
+          // Check for collision
+          let movementColliding: boolean;
+          for (let i = 0; i < updatedBlocks.length; i += 1) {
+            movementColliding = false;
+            for (let j = 0; j < collisionBlocks.length; j += 1) {
+              if (
+                updatedBlocks[i].controllable
+                && isColliding(
+                  {
+                    ...updatedBlocks[i],
+                    y: updatedBlocks[i].y - movementSpeed,
+                  },
+                  collisionBlocks[j],
+                )
+                && keyPressed === 'w') {
+                movementColliding = true;
+                break;
+              }
 
-        return updatedBlocks;
-      });
-    }
+              if (
+                updatedBlocks[i].controllable
+                && isColliding(
+                  {
+                    ...updatedBlocks[i],
+                    y: updatedBlocks[i].y + movementSpeed,
+                  },
+                  collisionBlocks[j],
+                )
+                && keyPressed === 's') {
+                movementColliding = true;
+                break;
+              }
 
-    if (keys.get('a')) {
-      setBlocks((prevBlocks) => {
-        const collisionBlocks = prevBlocks.filter((b) => b.type === 'collision');
-        const updatedBlocks = [...prevBlocks];
+              if (
+                updatedBlocks[i].controllable
+                && isColliding(
+                  {
+                    ...updatedBlocks[i],
+                    x: updatedBlocks[i].x - movementSpeed,
+                  },
+                  collisionBlocks[j],
+                )
+                && keyPressed === 'a') {
+                movementColliding = true;
+                break;
+              }
 
-        // Don't check for collision if there are no collision blocks
-        if (collisionBlocks.length === 0) {
-          return updatedBlocks.map(
-            (b) => (b.controllable ? { ...b, x: Math.max(b.x - movementSpeed, 0) } : b),
-          );
-        }
-
-        // Check for collision
-        let movementNotColliding: boolean;
-        for (let i = 0; i < updatedBlocks.length; i += 1) {
-          movementNotColliding = false;
-          for (let j = 0; j < collisionBlocks.length; j += 1) {
-            if (
-              updatedBlocks[i].controllable
-              && !isColliding(
-                {
-                  ...updatedBlocks[i],
-                  x: updatedBlocks[i].x - movementSpeed,
-                },
-                collisionBlocks[j],
-              )
-            ) {
-              movementNotColliding = true;
-              break;
+              if (
+                updatedBlocks[i].controllable
+                && isColliding(
+                  {
+                    ...updatedBlocks[i],
+                    x: updatedBlocks[i].x + movementSpeed,
+                  },
+                  collisionBlocks[j],
+                )
+                && keyPressed === 'd'
+              ) {
+                movementColliding = true;
+                break;
+              }
+            }
+            if (updatedBlocks[i].controllable && !movementColliding) {
+              if (keyPressed === 'w') {
+                updatedBlocks[i].y = Math.max(updatedBlocks[i].y - movementSpeed, 0);
+              } else if (keyPressed === 'a') {
+                updatedBlocks[i].x = Math.max(updatedBlocks[i].x - movementSpeed, 0);
+              } else if (keyPressed === 's') {
+                updatedBlocks[i].y = Math.min(updatedBlocks[i].y + movementSpeed, canvasHeight);
+              } else if (keyPressed === 'd') {
+                updatedBlocks[i].x = Math.min(updatedBlocks[i].x + movementSpeed, canvasWidth);
+              }
             }
           }
-
-          if (movementNotColliding) {
-            updatedBlocks[i].x = Math.max(updatedBlocks[i].x - movementSpeed, 0);
-          }
+          return updatedBlocks;
         }
 
-        return updatedBlocks;
-      });
-    }
-
-    if (keys.get('d') && canvasRef.current) {
-      const canvasWidth = canvasRef.current.width;
-      setBlocks((prevBlocks) => {
-        const collisionBlocks = prevBlocks.filter((b) => b.type === 'collision');
-        const updatedBlocks = [...prevBlocks];
-
-        // Don't check for collision if there are no collision blocks
-        if (collisionBlocks.length === 0) {
-          return updatedBlocks.map(
-            (b) => (b.controllable ? { ...b, x: Math.min(b.x + movementSpeed, canvasWidth) } : b),
-          );
-        }
-
-        // Check for collision
-        let movementNotColliding: boolean;
-        for (let i = 0; i < updatedBlocks.length; i += 1) {
-          movementNotColliding = false;
-          for (let j = 0; j < collisionBlocks.length; j += 1) {
-            if (
-              updatedBlocks[i].controllable
-              && !isColliding(
-                {
-                  ...updatedBlocks[i],
-                  x: updatedBlocks[i].x + movementSpeed,
-                },
-                collisionBlocks[j],
-              )
-            ) {
-              movementNotColliding = true;
-              break;
-            }
-          }
-          if (movementNotColliding) {
-            updatedBlocks[i].x = Math.min(updatedBlocks[i].x + movementSpeed, canvasWidth);
-          }
-        }
-
-        return updatedBlocks;
+        return prevBlocks;
       });
     }
   };
