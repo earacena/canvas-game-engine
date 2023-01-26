@@ -64,9 +64,7 @@ function ObjectList({
 
   return (
     <div className="w-fit">
-      Objects
-      {' '}
-      <ul className={`bg-slate-400 rounded-md p-1 ${blocks.length === 0 ? 'hidden' : ''} h-screen overflow-scroll`}>
+      <ul className={`bg-slate-400 rounded-md p-1 ${blocks.length === 0 ? 'hidden' : ''} overflow-scroll`}>
         {blocks.map((b) => (
           <div className="flex flex-row">
             <button type="button" onClick={() => handleDelete(b.id)}>

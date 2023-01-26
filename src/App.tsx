@@ -498,7 +498,7 @@ function App() {
 
   return (
     <div className="flex flex-row items-start">
-      <div className="flex flex-col">
+      <div className="flex flex-col h-screen overflow-scroll">
         <BackgroundObject
           background={background}
           setBackground={setBackground}
@@ -509,7 +509,12 @@ function App() {
           blockCount={blockCount}
           setBlockCount={setBlockCount}
         />
-
+        <ObjectList
+          blocks={blocks}
+          setBlocks={setBlocks}
+          selectedTargetId={selectedTargetId}
+          setSelectedTargetId={setSelectedTargetId}
+        />
       </div>
       <canvas
         className="border border-slate-400 hidden"
@@ -534,12 +539,6 @@ function App() {
         setMouseDown={setMouseDown}
         setMouseDownPos={setMouseDownPos}
         mouseDownPos={mouseDownPos}
-      />
-      <ObjectList
-        blocks={blocks}
-        setBlocks={setBlocks}
-        selectedTargetId={selectedTargetId}
-        setSelectedTargetId={setSelectedTargetId}
       />
     </div>
   );
