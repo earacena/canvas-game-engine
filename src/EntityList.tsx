@@ -10,11 +10,11 @@ function EntityList({
 }: EntityListProps) {
   return (
     <ul>
-      {entities.map((e) => {
+      {entities.map((e) => (
         <li id={e.id}>
           {e.name}
         </li>
-      })}
+      ))}
     </ul>
   );
 }
