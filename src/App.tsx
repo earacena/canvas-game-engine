@@ -4,6 +4,7 @@ import React, {
 import ObjectList from './ObjectList';
 import type {
   Block,
+  Entity,
   ViewportCoordinates,
   MouseDownCoordinates,
 } from './common.types';
@@ -11,6 +12,7 @@ import BackgroundObject from './BackgroundObject';
 import Minimap from './Minimap';
 import Viewport from './Viewport';
 import ObjectForm from './ObjectForm';
+import EntityForm from './EntityForm';
 
 function isWithinBlock(rect: Block, x: number, y: number): boolean {
   return (
@@ -30,10 +32,12 @@ function App() {
     { x: 0, y: 0 },
   );
 
-  // Objects
+  // Objects/Entities
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [blockCount, setBlockCount] = useState<number>(0);
   const [background, setBackground] = useState<HTMLImageElement | null>(null);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [entityCount, setEntityCount] = useState<number>(0);
 
   // Mouse/Keyboard interaction
   const [dragTargetId, setDragTargetId] = useState<string | null>(null);
@@ -508,6 +512,12 @@ function App() {
           setBlocks={setBlocks}
           blockCount={blockCount}
           setBlockCount={setBlockCount}
+        />
+        <EntityForm
+          entities={entities}
+          setEntities={setEntities}
+          entityCount={entityCount}
+          setEntityCount={setEntityCount}
         />
         <ObjectList
           blocks={blocks}
