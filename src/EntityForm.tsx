@@ -156,12 +156,6 @@ function ObjectForm({
           <input id="entity-health-input" className={inputStyle} {...register('entityHealth')} />
         </label>
 
-        <label id="entity-height-label" htmlFor="entity-height-input" className={labelStyle}>
-          Height
-          <span className="text-red-700">{errors.entityHeight?.message}</span>
-          <input id="entity-height-input" className={inputStyle} {...register('entityHeight')} />
-        </label>
-
         <button type="submit">Create</button>
       </form>
     </div>
