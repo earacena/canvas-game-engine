@@ -186,6 +186,32 @@ function App() {
           canvasCtxRef.current.strokeRect(x, y, w, h);
         }
       }
+
+      // Draw entities
+      for (let i = 0; i < entities.length; i += 1) {
+        const e = entities[i];
+
+        const {
+          x, y, w, h, image,
+        } = e;
+
+        if (image) {
+          // Draw image/texture instead of solid color
+          // Check if image has loaded, otherwise wait for it to load
+          if (image.complete) {
+            canvasCtxRef.current.drawImage(image, x, y, w, h);
+          } else {
+            image.onload = () => {
+              if (canvasCtxRef.current) {
+                canvasCtxRef.current.drawImage(image, x, y, w, h);
+              }
+            };
+          }
+        } else {
+          canvasCtxRef.current.fillStyle = 'red';
+          canvasCtxRef.current.fillRect(x, y, w, h);
+        }
+      }
     }
   };
 
